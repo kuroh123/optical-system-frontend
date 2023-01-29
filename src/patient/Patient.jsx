@@ -1,41 +1,41 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { userActions } from "_store";
+import { patientsActions } from "_store";
 
-export { Home };
+export { Patient };
 
-function Home() {
+function Patient() {
   const dispatch = useDispatch();
   const { user: authUser } = useSelector((x) => x.auth);
-  const { users } = useSelector((x) => x.users);
+  const { patients } = useSelector((x) => x.patients);
 
   useEffect(() => {
-    dispatch(userActions.getAll());
+    dispatch(patientsActions.getAll());
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div>
-      <h1>Hi {authUser?.email}!</h1>
+      <h1>Hi {authUser?.first_name}!</h1>
       <p>You're logged in with React 18 + Redux & JWT!!</p>
       <h3>Users from secure api end point:</h3>
-      {users.length && (
+      {patients.length && (
         <ul>
-          {users.map((user) => (
-            <li key={user.id}>
-              {user.email} - {user.location}
+          {patients.map((patient) => (
+            <li key={patient.id}>
+              {patient.first_name} - {patient.gender}
             </li>
           ))}
         </ul>
       )}
-      {users.loading && (
+      {patients.loading && (
         <div className="spinner-border spinner-border-sm"></div>
       )}
-      {users.error && (
+      {patients.error && (
         <div className="text-danger">
-          Error loading users: {users.error.message}
+          Error loading users: {patients.error.message}
         </div>
       )}
     </div>
