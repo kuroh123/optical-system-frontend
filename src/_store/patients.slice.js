@@ -24,7 +24,7 @@ function createInitialState() {
 }
 
 function createExtraActions() {
-  const baseUrl = `${process.env.REACT_APP_API_URL}/api/patients`;
+  const baseUrl = `${process.env.REACT_APP_API_URL}/patients`;
 
   return {
     getAll: getAll(),
