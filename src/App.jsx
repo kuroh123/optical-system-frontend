@@ -7,10 +7,11 @@ import {
 } from "react-router-dom";
 
 import { history } from "_helpers";
-import { Nav, PrivateRoute } from "_components";
+import { NavbarComponent, PrivateRoute } from "_components";
 import { Home } from "home";
 import { Login } from "login";
-import { Patient } from "patient";
+import { Patient, RegisterPatient } from "patient";
+// import { RegisterPatient } from "patient";
 
 export { App };
 
@@ -22,7 +23,7 @@ function App() {
 
   return (
     <div className="app-container bg-light">
-      <Nav />
+      <NavbarComponent />
       <div className="container pt-4 pb-4">
         <Routes>
           <Route
@@ -30,6 +31,14 @@ function App() {
             element={
               <PrivateRoute>
                 <Home />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <PrivateRoute>
+                <RegisterPatient />
               </PrivateRoute>
             }
           />
