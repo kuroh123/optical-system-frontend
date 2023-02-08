@@ -10,7 +10,15 @@ import { history } from "_helpers";
 import { NavbarComponent, PrivateRoute } from "_components";
 import { Home } from "home";
 import { Login } from "login";
-import { Patient, RegisterPatient } from "patient";
+import {
+  Patient,
+  PatientOutlet,
+  PatientRequest,
+  RegisterPatient,
+} from "patient";
+import { useDispatch, useSelector } from "react-redux";
+import { patientsActions } from "_store";
+import { useEffect } from "react";
 // import { RegisterPatient } from "patient";
 
 export { App };
@@ -20,6 +28,12 @@ function App() {
   // anywhere in the react app (inside or outside components)
   history.navigate = useNavigate();
   history.location = useLocation();
+  // const { user } = useSelector((state) => state.auth);
+  // const dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   dispatch(patientsActions.getAll());
+  // }, [user]);
 
   return (
     <div className="app-container bg-light">
@@ -46,10 +60,13 @@ function App() {
             path="/patient"
             element={
               <PrivateRoute>
-                <Patient />
+                <PatientOutlet />
               </PrivateRoute>
             }
-          />
+          >
+            <Route index element={<Patient />} />
+            <Route path=":id" element={<PatientRequest />} />
+          </Route>
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
