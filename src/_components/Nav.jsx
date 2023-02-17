@@ -28,6 +28,15 @@ function NavbarComponent() {
             Patient Summary
           </NavDropdown.Item>
         </NavDropdown>
+        <NavDropdown
+          title="Prescriptions"
+          id="nav-dropdown"
+          className="nav-item"
+        >
+          <NavDropdown.Item href="/prescription" eventKey="4.1">
+            View Prescriptions
+          </NavDropdown.Item>
+        </NavDropdown>
       </Nav>
       <Nav className="navbar-nav ml-auto">
         <Nav.Item className="nav-item ml-auto">

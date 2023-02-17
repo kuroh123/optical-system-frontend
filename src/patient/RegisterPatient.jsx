@@ -10,25 +10,26 @@ function RegisterPatient() {
   const navigate = useNavigate();
   const baseUrl = `${process.env.REACT_APP_API_URL}/patients`;
 
-  const initialValues = {
-    first_name: "",
-    last_name: "",
-    examined_by: "",
-    address: "",
-    dob: "",
-    age: 0,
-    gender: "",
-  };
-  const [values, setValues] = useState(initialValues);
+  // const initialValues = {
+  //   first_name: "",
+  //   last_name: "",
+  //   mobile: "",
+  //   examined_by: "",
+  //   address: "",
+  //   dob: "",
+  //   age: 0,
+  //   gender: "",
+  // };
+  // const [values, setValues] = useState(initialValues);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target;
 
-    setValues({
-      ...values,
-      [name]: value,
-    });
-  };
+  //   setValues({
+  //     ...values,
+  //     [name]: value,
+  //   });
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,37 +49,28 @@ function RegisterPatient() {
       <Container fluid>
         <h2>Register Patient</h2>
         <Row className="mb-3 mt-4">
-          <Col sm="4">
+          <Col sm="3">
             <Form.Group>
               <Form.Label>First name</Form.Label>
-              <Form.Control
-                name="first_name"
-                type="text"
-                value={values.first_name}
-                onChange={handleInputChange}
-              />
+              <Form.Control name="first_name" type="text" />
             </Form.Group>
           </Col>
-          <Col sm="4">
+          <Col sm="3">
             <Form.Group>
               <Form.Label>Last Name</Form.Label>
-              <Form.Control
-                name="last_name"
-                type="text"
-                value={values.last_name}
-                onChange={handleInputChange}
-              />
+              <Form.Control name="last_name" type="text" />
             </Form.Group>
           </Col>
-          <Col sm="4">
+          <Col sm="3">
+            <Form.Group>
+              <Form.Label>Mobile</Form.Label>
+              <Form.Control name="mobile" type="number" />
+            </Form.Group>
+          </Col>
+          <Col sm="3">
             <Form.Group>
               <Form.Label>Examined By</Form.Label>
-              <Form.Control
-                name="examined_by"
-                type="text"
-                value={values.examined_by}
-                onChange={handleInputChange}
-              />
+              <Form.Control name="examined_by" type="text" />
             </Form.Group>
           </Col>
         </Row>
@@ -86,45 +78,25 @@ function RegisterPatient() {
           <Col sm="4">
             <Form.Group>
               <Form.Label>Address</Form.Label>
-              <Form.Control
-                name="address"
-                type="textarea"
-                value={values.address}
-                onChange={handleInputChange}
-              />
+              <Form.Control name="address" type="textarea" />
             </Form.Group>
           </Col>
           <Col sm="4">
             <Form.Group>
               <Form.Label>Date Of Birth</Form.Label>
-              <Form.Control
-                name="dob"
-                type="date"
-                value={values.dob}
-                onChange={handleInputChange}
-              />
+              <Form.Control name="dob" type="date" />
             </Form.Group>
           </Col>
           <Col sm="2">
             <Form.Group>
               <Form.Label>Age</Form.Label>
-              <Form.Control
-                name="age"
-                type="text"
-                value={values.age}
-                onChange={handleInputChange}
-              />
+              <Form.Control name="age" type="text" />
             </Form.Group>
           </Col>
           <Col sm="2">
             <Form.Group>
               <Form.Label>Gender</Form.Label>
-              <Form.Control
-                name="gender"
-                type="text"
-                value={values.gender}
-                onChange={handleInputChange}
-              />
+              <Form.Control name="gender" type="text" />
             </Form.Group>
           </Col>
         </Row>

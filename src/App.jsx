@@ -13,12 +13,16 @@ import { Login } from "login";
 import {
   Patient,
   PatientOutlet,
-  PatientRequest,
   RegisterPatient,
+  EditPatient,
+  PatientPrescription,
 } from "patient";
 import { useDispatch, useSelector } from "react-redux";
 import { patientsActions } from "_store";
 import { useEffect } from "react";
+import { Prescription } from "prescription/Prescription";
+import { ListPrescription } from "prescription/ListPrescription";
+import { ViewPrescription } from "prescription/ViewPrescription";
 // import { RegisterPatient } from "patient";
 
 export { App };
@@ -64,8 +68,55 @@ function App() {
               </PrivateRoute>
             }
           >
-            <Route index element={<Patient />} />
-            <Route path=":id" element={<PatientRequest />} />
+            <Route
+              index
+              element={
+                <PrivateRoute>
+                  <Patient />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path=":patientId"
+              element={
+                <PrivateRoute>
+                  <PatientPrescription />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path=":patientId/edit"
+              element={
+                <PrivateRoute>
+                  <EditPatient />
+                </PrivateRoute>
+              }
+            />
+          </Route>
+          <Route
+            path="/prescription"
+            element={
+              <PrivateRoute>
+                <Prescription />
+              </PrivateRoute>
+            }
+          >
+            <Route
+              index
+              element={
+                <PrivateRoute>
+                  <ListPrescription />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path=":prescriptionId"
+              element={
+                <PrivateRoute>
+                  <ViewPrescription />
+                </PrivateRoute>
+              }
+            />
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<Navigate to="/" />} />

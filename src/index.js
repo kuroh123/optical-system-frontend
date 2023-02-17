@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { store } from "./_store";
 import { App } from "./App";
 import "./index.css";
+import "font-awesome/css/font-awesome.min.css";
 
 // setup fake backend
 // import { fakeBackend } from './_helpers';
