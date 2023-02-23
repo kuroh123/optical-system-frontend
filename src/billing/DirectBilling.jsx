@@ -8,9 +8,9 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import { gender } from "_helpers/eye-details";
 
-export { RegisterPatient };
+export { DirectBilling };
 
-function RegisterPatient() {
+function DirectBilling() {
   const form = useRef();
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState(new Date());

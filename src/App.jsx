@@ -23,6 +23,8 @@ import { useEffect } from "react";
 import { Prescription } from "prescription/Prescription";
 import { ListPrescription } from "prescription/ListPrescription";
 import { ViewPrescription } from "prescription/ViewPrescription";
+import { Billing } from "billing/Billing";
+import { Dashboard } from "home/Dashboard";
 // import { RegisterPatient } from "patient";
 
 export { App };
@@ -48,7 +50,7 @@ function App() {
             path="/"
             element={
               <PrivateRoute>
-                <Home />
+                <Dashboard />
               </PrivateRoute>
             }
           />
@@ -94,21 +96,13 @@ function App() {
             />
           </Route>
           <Route
-            path="/prescription"
+            path="/billing"
             element={
               <PrivateRoute>
-                <Prescription />
+                <Billing />
               </PrivateRoute>
             }
           >
-            <Route
-              index
-              element={
-                <PrivateRoute>
-                  <ListPrescription />
-                </PrivateRoute>
-              }
-            />
             <Route
               path=":prescriptionId"
               element={

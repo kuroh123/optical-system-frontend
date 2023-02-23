@@ -1,9 +1,14 @@
+import moment from "moment";
+import { ViewPrescription } from "prescription/ViewPrescription";
 import { useEffect, useState } from "react";
-import { Button, Col, Form, Row, Spinner } from "react-bootstrap";
+import { Alert, Button, Col, Form, Modal, Row, Spinner } from "react-bootstrap";
 import DataTable, { createTheme } from "react-data-table-component";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import ModuleDatePicker from "_components/ModuleDatePicker";
 import { fetchWrapper } from "_helpers";
+
+// import { parseISO, format } from "date-fns";
 
 import { patientsActions } from "_store";
 
@@ -14,6 +19,17 @@ function Patient() {
   // const { patients } = useSelector((state) => state.patients);
   const baseUrl = `${process.env.REACT_APP_API_URL}/patients`;
   const [fetchedPatients, setFetchedPatients] = useState([]);
+  const [patientId, setPatientId] = useState("");
+  const [delShow, setDelShow] = useState(false);
+  const [show, setShow] = useState(false);
+  const today = new Date();
+  const [startDateTime, setStartDateTime] = useState(
+    moment().format("YYYY-MM-01T00:00:00Z")
+  );
+  const [endDateTime, setEndDateTime] = useState(
+    moment(new Date()).format("YYYY-MM-DDTHH:mm:ssZ")
+  );
+
   const [filter, setFilter] = useState({
     first_name: "",
     mobile: "",
@@ -21,7 +37,9 @@ function Patient() {
   });
 
   const fetchPatient = async () => {
-    const response = await fetchWrapper.get(baseUrl);
+    const response = await fetchWrapper.get(
+      `${baseUrl}?startDate=${startDateTime}&endDate=${endDateTime}`
+    );
     if (response) {
       setFetchedPatients(response);
       setFilter({ list: response });
@@ -57,6 +75,9 @@ function Patient() {
       },
     },
   };
+
+  const handleDelClose = () => setDelShow(false);
+  const handleClose = () => setShow(false);
 
   const handleDelete = async (id) => {
     const response = await fetchWrapper.delete(baseUrl + "/" + id);
@@ -129,16 +150,41 @@ function Patient() {
           <Button
             className="ml-3 btn-danger fa fa-trash"
             size="sm"
-            onClick={() => handleDelete(row._id)}
+            onClick={() => {
+              setPatientId(row._id);
+              setDelShow(true);
+            }}
             id={row._id}
           />
         </div>
       ),
     },
+    {
+      name: "Prescriptions",
+      selector: null,
+      width: "100px",
+      cell: (row, index) => (
+        <Button
+          className="d-flex mx-auto btn-info fa fa-list-ul"
+          size="sm"
+          onClick={(e) => {
+            setPatientId(row._id);
+            setShow(true);
+          }}
+        />
+      ),
+    },
   ];
 
   return (
-    <div className="">
+    <>
+      <ModuleDatePicker
+        startDateTime={startDateTime}
+        endDateTime={endDateTime}
+        setStartDateTime={setStartDateTime}
+        setEndDateTime={setEndDateTime}
+        fetchData={fetchPatient}
+      />
       <Form>
         <Row className="mb-3 mt-4">
           <Col sm="3">
@@ -182,6 +228,23 @@ function Patient() {
           </div>
         }
       />
-    </div>
+      <Modal show={delShow} onHide={handleDelClose} size="sm" centered>
+        <Modal.Body>
+          <Alert variant="danger">
+            <div className="pr-2 fa fa-exclamation-triangle"></div>
+            Do you want to delete this patient and all its history?
+          </Alert>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={() => handleDelete(patientId)}>
+            Delete
+          </Button>
+          <Button variant="secondary" onClick={handleDelClose}>
+            Go Back
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <ViewPrescription show={show} setShow={setShow} id={patientId} />
+    </>
   );
 }
