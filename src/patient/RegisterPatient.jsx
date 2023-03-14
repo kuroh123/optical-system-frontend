@@ -13,8 +13,10 @@ export { RegisterPatient };
 function RegisterPatient() {
   const form = useRef();
   const navigate = useNavigate();
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(null);
   const [age, setAge] = useState(0);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const baseUrl = `${process.env.REACT_APP_API_URL}/patients`;
 
   function getAge(date) {
@@ -27,27 +29,6 @@ function RegisterPatient() {
     }
     setAge(age);
   }
-
-  // const initialValues = {
-  //   first_name: "",
-  //   last_name: "",
-  //   mobile: "",
-  //   examined_by: "",
-  //   address: "",
-  //   dob: "",
-  //   age: 0,
-  //   gender: "",
-  // };
-  // const [values, setValues] = useState(initialValues);
-
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target;
-
-  //   setValues({
-  //     ...values,
-  //     [name]: value,
-  //   });
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -70,25 +51,47 @@ function RegisterPatient() {
           <Col sm="3">
             <Form.Group>
               <Form.Label>First name</Form.Label>
-              <Form.Control required name="first_name" type="text" />
+              <Form.Control
+                required
+                name="first_name"
+                type="text"
+                value={firstName.toUpperCase()}
+                onChange={(e) => setFirstName(e.target.value)}
+                placeholder="Enter first name"
+              />
             </Form.Group>
           </Col>
           <Col sm="3">
             <Form.Group>
               <Form.Label>Last Name</Form.Label>
-              <Form.Control name="last_name" type="text" />
+              <Form.Control
+                name="last_name"
+                type="text"
+                value={lastName.toUpperCase()}
+                onChange={(e) => setLastName(e.target.value)}
+                placeholder="Enter last name"
+              />
             </Form.Group>
           </Col>
           <Col sm="3">
             <Form.Group>
               <Form.Label>Mobile</Form.Label>
-              <Form.Control required name="mobile" type="number" />
+              <Form.Control
+                required
+                name="mobile"
+                type="number"
+                placeholder="Enter Mobile no."
+              />
             </Form.Group>
           </Col>
           <Col sm="3">
             <Form.Group>
               <Form.Label>Examined By</Form.Label>
-              <Form.Control name="examined_by" type="text" />
+              <Form.Control
+                name="examined_by"
+                type="text"
+                placeholder="Examined By"
+              />
             </Form.Group>
           </Col>
         </Row>
@@ -96,14 +99,14 @@ function RegisterPatient() {
           <Col sm="4">
             <Form.Group>
               <Form.Label>Address</Form.Label>
-              <Form.Control name="address" type="textarea" />
+              <Form.Control
+                name="address"
+                type="textarea"
+                placeholder="Enter Address"
+              />
             </Form.Group>
           </Col>
           <Col sm="4">
-            {/* <Form.Group>
-              <Form.Label>Date Of Birth</Form.Label>
-              <Form.Control name="dob" type="date" />
-            </Form.Group> */}
             <div className="form-group">
               <label>DOB</label>
               <DatePicker
@@ -114,6 +117,8 @@ function RegisterPatient() {
                   getAge(date);
                   setSelectedDate(date);
                 }}
+                dateFormat="dd/MM/yyyy"
+                placeholderText="Select Date"
               />
             </div>
           </Col>
@@ -129,10 +134,6 @@ function RegisterPatient() {
             </Form.Group>
           </Col>
           <Col sm="2">
-            {/* <Form.Group>
-              <Form.Label>Gender</Form.Label>
-              <Form.Control name="gender" type="text" />
-            </Form.Group> */}
             <div className="form-group">
               <label>Gender</label>
               <Select name="gender" options={gender} />

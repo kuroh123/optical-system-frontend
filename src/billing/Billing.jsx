@@ -2,6 +2,7 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { Button, Col, Form, Row, Spinner } from "react-bootstrap";
 import DataTable from "react-data-table-component";
+import { Link, Outlet, useParams } from "react-router-dom";
 import ReactSelect from "react-select";
 import ModuleDatePicker from "_components/ModuleDatePicker";
 import { fetchWrapper } from "_helpers";
@@ -10,10 +11,10 @@ import { payment_status, status } from "_helpers/eye-details";
 export { Billing };
 
 const Billing = () => {
+  const { billingId } = useParams();
   const baseUrl = `${process.env.REACT_APP_API_URL}/billing`;
   const [billing, setBilling] = useState([]);
-  const [prescrbId, setPrescrbId] = useState("");
-  const [show, setShow] = useState(false);
+  const [billId, setBillId] = useState("");
   const [startDateTime, setStartDateTime] = useState(
     moment().format("YYYY-MM-01T00:00:00Z")
   );
@@ -73,8 +74,7 @@ const Billing = () => {
     {
       when: (row) => row.payment_status == "pending",
       style: {
-        backgroundColor: "rgb(244 67 96)",
-        color: "white",
+        backgroundColor: "#ffbebc",
         "&:hover": {
           cursor: "pointer",
         },
@@ -83,8 +83,7 @@ const Billing = () => {
     {
       when: (row) => row.payment_status == "partially_paid",
       style: {
-        backgroundColor: "#E4A11B",
-        color: "white",
+        backgroundColor: "#ffe1a6",
         "&:hover": {
           cursor: "pointer",
         },
@@ -196,22 +195,21 @@ const Billing = () => {
       name: "Actions",
       selector: null,
       cell: (row, index) => (
-        //   <div className="d-flex">
-        //     <Button
-        //       className="btn-success fa fa-file-text-o"
-        //       size="sm"
-        //       onClick={(e) => {
-        //         setPrescrbId(row._id);
-        //         setShow(true);
-        //       }}
-        //     />
-        <Button
-          className="ml-3 btn-danger fa fa-trash"
-          size="sm"
-          onClick={() => handleDelete(row._id)}
-          id={row._id}
-        />
-        //   </div>
+        <div className="d-flex">
+          <Button
+            size="sm"
+            className={`btn-warning fa fa-edit`}
+            as={Link}
+            to={`/billing/${row._id}`}
+            id={row.id}
+          ></Button>
+          <Button
+            className="ml-3 btn-danger fa fa-trash"
+            size="sm"
+            onClick={() => handleDelete(row._id)}
+            id={row._id}
+          />
+        </div>
       ),
     },
     {
@@ -219,6 +217,10 @@ const Billing = () => {
       selector: (row) => moment(row.patient?.created_at).format("DD-MM-YYYY"),
     },
   ];
+
+  if (billingId) {
+    return <Outlet />;
+  }
   return (
     <>
       <div className="">
@@ -297,7 +299,6 @@ const Billing = () => {
           }
         />
       </div>
-      {/* <ViewPrescription show={show} setShow={setShow} id={prescrbId} /> */}
     </>
   );
 };

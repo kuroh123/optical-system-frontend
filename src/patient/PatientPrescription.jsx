@@ -80,16 +80,16 @@ function PatientPrescription() {
   const [billValues, setBillValues] = useState(billInitialValues);
   const [eyeValues, setEyeValues] = useState(eyeInitialValues);
 
-  billValues.vat = parseFloat(billValues.apply_vat_amount * 0.05).toFixed(2);
+  billValues.vat = parseFloat(billValues.apply_vat_amount * 0.05).toFixed(3);
   billValues.total_amount = parseFloat(
     parseFloat(billValues.lens_price) +
       parseFloat(billValues.frame_price) +
       parseFloat(billValues.extra_charges) +
       parseFloat(billValues.vat)
-  ).toFixed(2);
+  ).toFixed(3);
   billValues.balance_amount = parseFloat(
     parseFloat(billValues.total_amount) - parseFloat(billValues.paid_amount)
-  ).toFixed(2);
+  ).toFixed(3);
 
   const handleBillInputChange = (e) => {
     const { name, value } = e.target;
@@ -235,7 +235,7 @@ function PatientPrescription() {
                     --spherical--
                   </option>
                   {spherical.map((sph) => (
-                    <option>{parseFloat(sph).toFixed(2)}</option>
+                    <option>{parseFloat(sph).toFixed(3)}</option>
                   ))}
                 </select>
               </td>
@@ -250,7 +250,7 @@ function PatientPrescription() {
                     --cylindrical--
                   </option>
                   {cylindrical.map((cyl) => (
-                    <option>{parseFloat(cyl).toFixed(2)}</option>
+                    <option>{parseFloat(cyl).toFixed(3)}</option>
                   ))}
                 </select>
               </td>
@@ -315,7 +315,7 @@ function PatientPrescription() {
                     --spherical--
                   </option>
                   {spherical.map((sph) => (
-                    <option>{parseFloat(sph).toFixed(2)}</option>
+                    <option>{parseFloat(sph).toFixed(3)}</option>
                   ))}
                 </select>
               </td>
@@ -330,7 +330,7 @@ function PatientPrescription() {
                     --cylindrical--
                   </option>
                   {cylindrical.map((cyl) => (
-                    <option>{parseFloat(cyl).toFixed(2)}</option>
+                    <option>{parseFloat(cyl).toFixed(3)}</option>
                   ))}
                 </select>
               </td>

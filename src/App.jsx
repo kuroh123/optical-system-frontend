@@ -25,6 +25,7 @@ import { ListPrescription } from "prescription/ListPrescription";
 import { ViewPrescription } from "prescription/ViewPrescription";
 import { Billing } from "billing/Billing";
 import { Dashboard } from "home/Dashboard";
+import { EditBilling } from "billing/EditBilling";
 // import { RegisterPatient } from "patient";
 
 export { App };
@@ -104,10 +105,10 @@ function App() {
             }
           >
             <Route
-              path=":prescriptionId"
+              path=":billingId"
               element={
                 <PrivateRoute>
-                  <ViewPrescription />
+                  <EditBilling />
                 </PrivateRoute>
               }
             />
