@@ -6,9 +6,11 @@ import {
   useLocation,
 } from "react-router-dom";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import { history } from "_helpers";
 import { NavbarComponent, PrivateRoute } from "_components";
-import { Home } from "home";
 import { Login } from "login";
 import {
   Patient,
@@ -17,30 +19,17 @@ import {
   EditPatient,
   PatientPrescription,
 } from "patient";
-import { useDispatch, useSelector } from "react-redux";
-import { patientsActions } from "_store";
-import { useEffect } from "react";
-import { Prescription } from "prescription/Prescription";
-import { ListPrescription } from "prescription/ListPrescription";
-import { ViewPrescription } from "prescription/ViewPrescription";
 import { Billing } from "billing/Billing";
 import { Dashboard } from "home/Dashboard";
 import { EditBilling } from "billing/EditBilling";
+import { ProductMaster } from "inventory/ProductMaster";
 // import { RegisterPatient } from "patient";
 
 export { App };
 
 function App() {
-  // init custom history object to allow navigation from
-  // anywhere in the react app (inside or outside components)
   history.navigate = useNavigate();
   history.location = useLocation();
-  // const { user } = useSelector((state) => state.auth);
-  // const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   dispatch(patientsActions.getAll());
-  // }, [user]);
 
   return (
     <div className="app-container bg-light">
@@ -113,9 +102,18 @@ function App() {
               }
             />
           </Route>
+          <Route
+            path="/products"
+            element={
+              <PrivateRoute>
+                <ProductMaster />
+              </PrivateRoute>
+            }
+          ></Route>
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
+        <ToastContainer />
       </div>
     </div>
   );

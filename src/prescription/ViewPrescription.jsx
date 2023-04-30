@@ -28,17 +28,17 @@ function ViewPrescription({ show, setShow, id }) {
   console.log(prescriptionData);
   const handleClose = () => {
     setShow(false);
-    // setPrescriptionData([]);
   };
 
   return (
     <>
       <Modal show={show} onHide={handleClose} size="lg" centered>
-        {/* <Modal.Header>
-          <Modal.Title>
-            Prescription Deta - {data?.visit_id}
-          </Modal.Title>
-        </Modal.Header> */}
+        <Modal.Header>
+          <b>
+            Patient - {prescriptionData[0]?.patient?.first_name}{" "}
+            {prescriptionData[0]?.patient?.last_name}
+          </b>
+        </Modal.Header>
         <Modal.Body>
           {prescriptionData.length > 0 &&
             prescriptionData.map((data) => (
