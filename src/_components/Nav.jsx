@@ -32,8 +32,16 @@ function NavbarComponent() {
           <Nav.Link href="/billing">Billing</Nav.Link>
         </Nav>
         <Nav className="me-auto">
-          <Nav.Link href="/directbilling">Direct Billing</Nav.Link>
+          <Nav.Link href="/test">Direct Billing</Nav.Link>
         </Nav>
+        <NavDropdown title="Inventory" id="nav-dropdown" className="nav-item">
+          <NavDropdown.Item href="/products" eventKey="4.1">
+            Products
+          </NavDropdown.Item>
+          <NavDropdown.Item href="/xyz" eventKey="4.2">
+            xyz
+          </NavDropdown.Item>
+        </NavDropdown>
       </Nav>
       <Nav className="navbar-nav ml-auto">
         <Nav.Item className="nav-item ml-auto">

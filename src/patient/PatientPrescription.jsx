@@ -63,7 +63,7 @@ function PatientPrescription() {
   };
 
   const eyeInitialValues = {
-    r_sph: 0.0,
+    r_sph: "",
     r_cyl: "",
     r_axis: "",
     r_add: "",
@@ -75,7 +75,6 @@ function PatientPrescription() {
     l_add: "",
     l_prism: "",
     l_va: "",
-    prescription_remarks: "",
   };
   const [billValues, setBillValues] = useState(billInitialValues);
   const [eyeValues, setEyeValues] = useState(eyeInitialValues);
@@ -129,10 +128,10 @@ function PatientPrescription() {
     let billData = billValues;
     eyeData.patient = patientId;
     billData.patient = patientId;
-    billData.lens_type = lensType.value;
-    billData.lens_for = lensFor.value;
-    billData.lens_side = lensSide.value;
-    billData.frame_type = frameType.value;
+    billData.lens_type = lensType?.value;
+    billData.lens_for = lensFor?.value;
+    billData.lens_side = lensSide?.value;
+    billData.frame_type = frameType?.value;
     billData.lens_expiry = lensExpiry;
     billData.other_items = otherItems;
 
@@ -165,25 +164,14 @@ function PatientPrescription() {
         <h2>Patient Prescription</h2>
         <hr />
         <Alert key="info" variant="info">
-          <Row className="mb-3 mt-4">
+          <Row className="d-flex justify-content-around mb-3 mt-4">
             <Col sm="4">
               <Form.Group>
-                <Form.Label>Patient name</Form.Label>
+                <Form.Label>Patient</Form.Label>
                 <Form.Control
                   name="full_name"
                   type="text"
-                  value={`${patientData?.first_name} ${patientData?.last_name}`}
-                  disabled
-                />
-              </Form.Group>
-            </Col>
-            <Col sm="4">
-              <Form.Group>
-                <Form.Label>Age/Gender</Form.Label>
-                <Form.Control
-                  name="age_gender"
-                  type="text"
-                  value={`${patientData?.age}/${patientData?.gender}`}
+                  value={`${patientData?.first_name} ${patientData?.last_name} / ${patientData?.gender}`}
                   disabled
                 />
               </Form.Group>
@@ -235,7 +223,7 @@ function PatientPrescription() {
                     --spherical--
                   </option>
                   {spherical.map((sph) => (
-                    <option>{parseFloat(sph).toFixed(3)}</option>
+                    <option>{parseFloat(sph).toFixed(2)}</option>
                   ))}
                 </select>
               </td>
@@ -250,7 +238,7 @@ function PatientPrescription() {
                     --cylindrical--
                   </option>
                   {cylindrical.map((cyl) => (
-                    <option>{parseFloat(cyl).toFixed(3)}</option>
+                    <option>{parseFloat(cyl).toFixed(2)}</option>
                   ))}
                 </select>
               </td>
@@ -315,7 +303,7 @@ function PatientPrescription() {
                     --spherical--
                   </option>
                   {spherical.map((sph) => (
-                    <option>{parseFloat(sph).toFixed(3)}</option>
+                    <option>{parseFloat(sph).toFixed(2)}</option>
                   ))}
                 </select>
               </td>
@@ -330,7 +318,7 @@ function PatientPrescription() {
                     --cylindrical--
                   </option>
                   {cylindrical.map((cyl) => (
-                    <option>{parseFloat(cyl).toFixed(3)}</option>
+                    <option>{parseFloat(cyl).toFixed(2)}</option>
                   ))}
                 </select>
               </td>
@@ -382,16 +370,7 @@ function PatientPrescription() {
             </tr>
           </tbody>
         </table>
-        <label>Prescription Remarks</label>
-        <textarea
-          className="form-control"
-          name="prescription_remarks"
-          type="textarea"
-          rows="3"
-          cols="30"
-          value={eyeValues.prescription_remarks}
-          onChange={handleEyeInputChange}
-        />
+
         <div className="my-3">
           <div className="h4 mb-3">Frame/Lens Details</div>
           <Row>
@@ -401,7 +380,8 @@ function PatientPrescription() {
                 isClearable
                 options={lens_types}
                 name="lens_type"
-                value={lensType}
+                // value={lensType}
+                defaultValue={lensType}
                 onChange={setLensType}
               />
             </Col>
@@ -437,7 +417,7 @@ function PatientPrescription() {
             </Col>
           </Row>
           <Row className="my-3">
-            {lensType.value === "Contact-lens" ? (
+            {lensType?.value === "Contact-lens" ? (
               <Col md="3">
                 <label>Contact Lens Expiry</label>
                 <DatePicker
@@ -522,18 +502,6 @@ function PatientPrescription() {
                 />
               </Form.Group>
             </Col>
-            <Col sm="3">
-              <label>Bill Remarks</label>
-              <textarea
-                className="form-control"
-                name="bill_remarks"
-                type="textarea"
-                rows="2"
-                cols="20"
-                value={billValues.bill_remarks}
-                onChange={handleBillInputChange}
-              />
-            </Col>
           </Row>
           <Row className="mt-2">
             <Col sm="2">
@@ -609,7 +577,7 @@ function PatientPrescription() {
           <Button
             className="d-flex justify-content-center btn btn-success"
             type="submit"
-            disabled={loading}
+            // disabled={loading}
           >
             Save Prescription
           </Button>

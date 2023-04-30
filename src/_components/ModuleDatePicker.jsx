@@ -49,7 +49,7 @@ const ModuleDatePicker = ({
             style={{ width: 100 }}
           />
         </div>
-        <div sm={3} md={5} lg={3} className="d-flex align-items-end">
+        {/* <div sm={3} md={5} lg={3} className="d-flex align-items-end">
           <Button
             className="d-flex mx-2 align-items-center bg-info"
             type="button"
@@ -59,7 +59,7 @@ const ModuleDatePicker = ({
           >
             <span className="fa fa-search" size={20} />
           </Button>
-        </div>
+        </div> */}
       </div>
       <div className="d-flex">
         <Button

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchWrapper } from "_helpers";
@@ -11,48 +11,73 @@ import { gender } from "_helpers/eye-details";
 export { EditBilling };
 function EditBilling() {
   const { billingId } = useParams();
+  const navigate = useNavigate();
   const baseUrl = `${process.env.REACT_APP_API_URL}/billing`;
   const [loading, setLoading] = useState(false);
-  const [billingData, setBillingData] = useState(null);
+  const [billingData, setBillingData] = useState({});
   const form = useRef();
-  const billInitialValues = {
-    lens_price: 0,
-    frame_price: 0,
-    extra_charges: 0,
-    apply_vat_amount: 0,
-    vat: 0,
-    paid_amount: 0,
-    total_amount: 0,
-    balance_amount: 0,
-  };
-  const [billValues, setBillValues] = useState(billInitialValues);
 
-  billValues.vat = parseFloat(billValues.apply_vat_amount * 0.05).toFixed(3);
-  billValues.total_amount = parseFloat(
-    parseFloat(billValues.lens_price) +
-      parseFloat(billValues.frame_price) +
-      parseFloat(billValues.extra_charges) +
-      parseFloat(billValues.vat)
+  const fetchBilling = async () => {
+    const response = await fetchWrapper.get(baseUrl + "/" + billingId);
+    if (response) {
+      setBillingData(response);
+    }
+  };
+
+  useEffect(() => {
+    fetchBilling();
+  }, [billingId]);
+
+  // const billInitialValues = {
+  //   lens_price: 0,
+  //   frame_price: 0,
+  //   extra_charges: 0,
+  //   apply_vat_amount: 0,
+  //   vat: 0,
+  //   paid_amount: 0,
+  //   total_amount: 0,
+  //   balance_amount: 0,
+  // };
+  // const [billValues, setBillValues] = useState(billingData);
+
+  if (billingData?.apply_vat_amount > 0) {
+    billingData.vat = parseFloat(billingData?.apply_vat_amount * 0.05).toFixed(
+      3
+    );
+  } else {
+    billingData.vat = parseFloat(billingData?.vat);
+  }
+  billingData.total_amount = parseFloat(
+    parseFloat(billingData?.lens_price) +
+      parseFloat(billingData?.frame_price) +
+      parseFloat(billingData?.extra_charges) +
+      parseFloat(billingData?.vat)
   ).toFixed(3);
-  billValues.balance_amount = parseFloat(
-    parseFloat(billValues.total_amount) - parseFloat(billValues.paid_amount)
+  billingData.balance_amount = parseFloat(
+    parseFloat(billingData?.total_amount) - parseFloat(billingData?.paid_amount)
   ).toFixed(3);
 
   const handleBillInputChange = (e) => {
     const { name, value } = e.target;
 
-    setBillValues({
-      ...billValues,
+    setBillingData({
+      ...billingData,
       [name]: value,
     });
   };
 
-  const fetchBilling = async () => {
-    const response = fetchWrapper(baseUrl + "/" + billingId);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(billingData);
+    alert();
+    const billResponse = await fetchWrapper.put(
+      baseUrl + "/" + billingId + "/",
+      billingData
+    );
+    if (billResponse) {
+      setLoading(false);
+      navigate("/billing");
+    }
   };
 
   return (
@@ -67,7 +92,7 @@ function EditBilling() {
                 <Form.Control
                   name="lens_price"
                   type="text"
-                  value={billValues.lens_price}
+                  value={billingData?.lens_price}
                   onChange={handleBillInputChange}
                 />
               </Form.Group>
@@ -78,7 +103,7 @@ function EditBilling() {
                 <Form.Control
                   name="frame_price"
                   type="text"
-                  value={billValues.frame_price}
+                  value={billingData?.frame_price}
                   onChange={handleBillInputChange}
                 />
               </Form.Group>
@@ -89,7 +114,7 @@ function EditBilling() {
                 <Form.Control
                   name="extra_charges"
                   type="text"
-                  value={billValues.extra_charges}
+                  value={billingData?.extra_charges}
                   onChange={handleBillInputChange}
                 />
               </Form.Group>
@@ -102,7 +127,7 @@ function EditBilling() {
                 type="textarea"
                 rows="2"
                 cols="20"
-                value={billValues.bill_remarks}
+                value={billingData?.bill_remarks}
                 onChange={handleBillInputChange}
               />
             </Col>
@@ -114,9 +139,10 @@ function EditBilling() {
                   VAT on Amount
                 </Form.Label>
                 <Form.Control
+                  defaultValue={0}
                   name="apply_vat_amount"
                   type="text"
-                  value={billValues.apply_vat_amount}
+                  value={billingData?.apply_vat_amount}
                   onChange={handleBillInputChange}
                 />
               </Form.Group>
@@ -127,7 +153,7 @@ function EditBilling() {
                 <Form.Control
                   name="vat"
                   type="text"
-                  value={billValues.vat}
+                  value={billingData?.vat}
                   onChange={handleBillInputChange}
                   readOnly
                 />
@@ -141,7 +167,7 @@ function EditBilling() {
                 <Form.Control
                   name="total_amount"
                   type="text"
-                  value={billValues.total_amount}
+                  value={billingData?.total_amount}
                   onChange={handleBillInputChange}
                   readOnly
                 />
@@ -155,7 +181,7 @@ function EditBilling() {
                 <Form.Control
                   name="paid_amount"
                   type="text"
-                  value={billValues.paid_amount}
+                  value={billingData?.paid_amount}
                   onChange={handleBillInputChange}
                 />
               </Form.Group>
@@ -168,7 +194,7 @@ function EditBilling() {
                 <Form.Control
                   name="balance_amount"
                   type="text"
-                  value={billValues.balance_amount}
+                  value={billingData?.balance_amount}
                   onChange={handleBillInputChange}
                   readOnly
                 />

@@ -15,8 +15,6 @@ import { patientsActions } from "_store";
 export { Patient };
 
 function Patient() {
-  // const dispatch = useDispatch();
-  // const { patients } = useSelector((state) => state.patients);
   const baseUrl = `${process.env.REACT_APP_API_URL}/patients`;
   const [fetchedPatients, setFetchedPatients] = useState([]);
   const [patientId, setPatientId] = useState("");
@@ -24,10 +22,10 @@ function Patient() {
   const [show, setShow] = useState(false);
   const today = new Date();
   const [startDateTime, setStartDateTime] = useState(
-    moment().format("YYYY-MM-01T00:00:00Z")
+    moment(today).format("YYYY-MM-DDT00:00:00Z")
   );
   const [endDateTime, setEndDateTime] = useState(
-    moment(new Date()).format("YYYY-MM-DDTHH:mm:ssZ")
+    moment(today).format("YYYY-MM-DDTHH:mm:ssZ")
   );
 
   const [filter, setFilter] = useState({
@@ -48,7 +46,7 @@ function Patient() {
 
   useEffect(() => {
     fetchPatient();
-  }, []);
+  }, [startDateTime, endDateTime]);
   console.log(fetchedPatients);
 
   const customStyles = {
@@ -77,7 +75,6 @@ function Patient() {
   };
 
   const handleDelClose = () => setDelShow(false);
-  const handleClose = () => setShow(false);
 
   const handleDelete = async (id) => {
     const response = await fetchWrapper.delete(baseUrl + "/" + id);
@@ -117,8 +114,9 @@ function Patient() {
       sortable: true,
     },
     {
-      name: "Age/Gender ",
-      selector: (row) => `${row?.age}/${row?.gender}`,
+      name: "Gender ",
+      selector: (row) => row?.gender,
+      width: "60px",
     },
     {
       name: "Mobile",
@@ -127,6 +125,10 @@ function Patient() {
     {
       name: "Examined By",
       selector: (row) => row?.examined_by,
+    },
+    {
+      name: "Registered On",
+      selector: (row) => moment(row?.created_at).format("DD-MM-YYYY h:mm a"),
     },
     {
       name: "Actions",
