@@ -1,5 +1,5 @@
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Button, Col, Form, Row, Spinner } from "react-bootstrap";
 import DataTable from "react-data-table-component";
 import { Link, Outlet, useParams } from "react-router-dom";
@@ -7,6 +7,9 @@ import ReactSelect from "react-select";
 import ModuleDatePicker from "_components/ModuleDatePicker";
 import { fetchWrapper } from "_helpers";
 import { payment_status, status } from "_helpers/eye-details";
+import BillingForm from "./BillingForm";
+import ReactToPrint from "react-to-print";
+import PrintBill from "./PrintBill";
 
 export { Billing };
 
@@ -15,12 +18,15 @@ const Billing = () => {
   const baseUrl = `${process.env.REACT_APP_API_URL}/billing`;
   const [billing, setBilling] = useState([]);
   const [billId, setBillId] = useState("");
+  const [modalShow, setModalShow] = useState(false);
   const [startDateTime, setStartDateTime] = useState(
     moment().format("YYYY-MM-01T00:00:00Z")
   );
   const [endDateTime, setEndDateTime] = useState(
     moment(new Date()).format("YYYY-MM-DDTHH:mm:ssZ")
   );
+
+  const printBillRef = useRef();
 
   const [filter, setFilter] = useState({
     bill_no: "",
@@ -42,7 +48,7 @@ const Billing = () => {
 
   useEffect(() => {
     fetchBilling();
-  }, []);
+  }, [startDateTime, endDateTime]);
   console.log(billing);
 
   const customStyles = {
@@ -194,8 +200,9 @@ const Billing = () => {
     {
       name: "Actions",
       selector: null,
+      width: "160px",
       cell: (row, index) => (
-        <div className="d-flex">
+        <div className="d-flex align-items-center">
           <Button
             size="sm"
             className={`btn-warning fa fa-edit`}
@@ -203,6 +210,17 @@ const Billing = () => {
             to={`/billing/${row._id}`}
             id={row.id}
           ></Button>
+          <div className="ml-3">
+            <ReactToPrint
+              trigger={() => (
+                <Button className="btn-success fa fa-print" size="sm" />
+              )}
+              content={() => printBillRef.current}
+            />
+            <div style={{ display: "none" }}>
+              <PrintBill ref={printBillRef} row={row.id} />
+            </div>
+          </div>
           <Button
             className="ml-3 btn-danger fa fa-trash"
             size="sm"
@@ -282,6 +300,13 @@ const Billing = () => {
             </Col>
           </Row>
         </Form>
+        <div className="d-flex justify-content-end align-items-center mb-3 mt-4">
+          <div>
+            <Button size="sm" onClick={() => setModalShow(true)}>
+              Add New Bill
+            </Button>
+          </div>
+        </div>
         <DataTable
           data={filter.list}
           conditionalRowStyles={conditionalRowStyles}
@@ -299,6 +324,11 @@ const Billing = () => {
           }
         />
       </div>
+      <BillingForm
+        modalShow={modalShow}
+        setModalShow={setModalShow}
+        fetchBilling={fetchBilling}
+      />
     </>
   );
 };

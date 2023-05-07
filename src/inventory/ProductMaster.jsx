@@ -52,6 +52,7 @@ function ProductMaster() {
       name: "S. no.",
       selector: (row) => row?.product_no,
       sortable: true,
+      width: "65px",
     },
     {
       name: "Code ",
@@ -73,6 +74,10 @@ function ProductMaster() {
       selector: (row) => row?.product_category,
     },
     {
+      name: "Product for",
+      selector: (row) => row?.product_for,
+    },
+    {
       name: "Description",
       selector: (row) => row?.description,
       wrap: true,
@@ -86,14 +91,17 @@ function ProductMaster() {
       name: "Stocked on",
       selector: (row) => moment(row?.created_at).format("DD-MM-YYYY h:mm a"),
       sortable: true,
+      wrap: true,
     },
     {
       name: "Ordered qty",
       selector: (row) => row?.ordered_quantity,
+      width: "90px",
     },
     {
       name: "Current qty",
       selector: (row) => row.current_quantity,
+      width: "90px",
     },
     {
       name: "Actions",
@@ -344,14 +352,21 @@ function ProductMaster() {
               <Row>
                 <Col sm="6">
                   <Form.Group>
-                    <Form.Label>Batch No.</Form.Label>
+                    <Form.Label>Product For</Form.Label>
                     <Form.Control
                       size="sm"
-                      name="batch_no"
-                      type="text"
-                      defaultValue={values?.batch_no}
-                      placeholder="Enter batch no."
-                    />
+                      as="select"
+                      name="product_for"
+                      defaultValue={values?.product_for}
+                      required
+                    >
+                      <option selected disabled value="">
+                        select
+                      </option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Kids">Kids</option>
+                    </Form.Control>
                   </Form.Group>
                 </Col>
                 <Col sm="6">
@@ -397,14 +412,14 @@ function ProductMaster() {
               <Row className="align-items-center">
                 <Col sm="6">
                   <Form.Group>
-                    <Form.Label>Supplier Cost</Form.Label>
+                    <Form.Label>Purchase Cost</Form.Label>
                     <Form.Control
                       size="sm"
                       name="supplier_cost"
                       type="number"
                       step="0.001"
                       defaultValue={values?.supplier_cost}
-                      placeholder="Enter supplier cost"
+                      placeholder="Enter purchase cost"
                       onChange={(e) => setSupplierCost(e.target.value)}
                     />
                   </Form.Group>
@@ -436,33 +451,25 @@ function ProductMaster() {
                     />
                   </Form.Group>
                 </Col>
-                <Col sm="6" className="">
-                  <Form.Check
-                    label="VAT Applicable?"
-                    size="sm"
-                    name="vat_applicable"
-                    checked={values?.vat_applicable}
-                    onChange={(e) => setVat(e.target.checked)}
-                  />
+                <Col sm="6">
+                  <Form.Group>
+                    <Form.Label>Stocked on</Form.Label>
+                    <Form.Control
+                      size="sm"
+                      name="created_at"
+                      type="date"
+                      placeholder="dd-mm-yyyy"
+                      min="1997-01-01"
+                      max="2030-12-31"
+                      defaultValue={moment(values?.created_at).format(
+                        "yyyy-MM-DD"
+                      )}
+                    />
+                  </Form.Group>
                 </Col>
               </Row>
             </Col>
           </Row>
-          {vat && (
-            <Row>
-              <Col sm={{ offset: 9 }}>
-                <Form.Group>
-                  <Form.Label>VAT</Form.Label>
-                  <Form.Control
-                    size="sm"
-                    name="vat"
-                    type="number"
-                    defaultValue={(sellingCost * 0.05).toFixed(3)}
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
-          )}
           <div className="d-flex justify-content-center align-items-center mt-5">
             <Button size="sm" className="btn btn-success" type="submit">
               Save & Close

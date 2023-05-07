@@ -13,52 +13,46 @@ import { useNavigate, useParams } from "react-router-dom";
 import { fetchWrapper } from "_helpers";
 import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
+import AsyncSelect from "react-select/async";
 import {
   spherical,
   cylindrical,
   axis,
-  lens_types,
-  frame_types,
-  lens_for,
-  lens_side,
   other_items,
 } from "_helpers/eye-details";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import ProductTable from "_components/ProductTable";
 
 export { PatientPrescription };
 
 function PatientPrescription() {
   const { patientId } = useParams();
-  const [patientData, setPatientdata] = useState([]);
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [patientData, setPatientdata] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [selectValue, setSelectValue] = useState("");
 
   const form = useRef();
+
+  //URLS
   const baseUrl = `${process.env.REACT_APP_API_URL}/patients`;
+  const productBaseUrl = `${process.env.REACT_APP_API_URL}/product`;
   const prescriptionRequestBaseUrl = `${process.env.REACT_APP_API_URL}/patientrequest`;
   const billRequestBaseUrl = `${process.env.REACT_APP_API_URL}/billing`;
 
-  const [lensType, setLensType] = useState({});
-  const [lensFor, setLensFor] = useState({});
-  const [lensSide, setLensSide] = useState({});
-  const [frameType, setFrameType] = useState({});
-  const [otherItems, setOtherItems] = useState([]);
-  const [lensExpiry, setLensExpiry] = useState(null);
-
   //need to add remaining fields and fix the values of select fields
   const billInitialValues = {
-    lens_name: "",
-    frame_name: "",
-    bill_remarks: "",
-    lens_price: 0,
-    frame_price: 0,
-    extra_charges: 0,
-    apply_vat_amount: 0,
-    vat: 0,
-    paid_amount: 0,
     total_amount: 0,
+    discount: 0,
+    extra_charges: 0,
+    vat: 0,
+    grand_total: 0,
+    payment_type: "",
+    paid_amount: 0,
     balance_amount: 0,
   };
 
@@ -79,15 +73,33 @@ function PatientPrescription() {
   const [billValues, setBillValues] = useState(billInitialValues);
   const [eyeValues, setEyeValues] = useState(eyeInitialValues);
 
-  billValues.vat = parseFloat(billValues.apply_vat_amount * 0.05).toFixed(3);
-  billValues.total_amount = parseFloat(
-    parseFloat(billValues.lens_price) +
-      parseFloat(billValues.frame_price) +
+  // Billing Calculations
+  let total_amount = 0;
+  let discount = 0;
+  let vat = 0;
+  for (let item of selectedOptions) {
+    if (item.vat_applicable === "Yes") {
+      total_amount += item.selling_price * item.sold_quantity;
+      vat += (total_amount - item.discount) * 0.05;
+      // vat += item_vat;
+      discount += item.discount;
+    } else {
+      total_amount += item.selling_price * item.sold_quantity;
+      discount += item.discount;
+    }
+  }
+  billValues.total_amount = parseFloat(total_amount).toFixed(3);
+  billValues.discount = parseFloat(discount).toFixed(3);
+  billValues.vat = parseFloat(vat).toFixed(3);
+  // billValues.vat = parseFloat(vat).toFixed(3);
+  billValues.grand_total = parseFloat(
+    parseFloat(billValues.total_amount) +
       parseFloat(billValues.extra_charges) +
-      parseFloat(billValues.vat)
+      parseFloat(billValues.vat) -
+      parseFloat(billValues.discount)
   ).toFixed(3);
   billValues.balance_amount = parseFloat(
-    parseFloat(billValues.total_amount) - parseFloat(billValues.paid_amount)
+    parseFloat(billValues.grand_total) - parseFloat(billValues.paid_amount)
   ).toFixed(3);
 
   const handleBillInputChange = (e) => {
@@ -121,6 +133,10 @@ function PatientPrescription() {
     }
   }, [patientId]);
 
+  // useEffect(() => {
+  //   fetchProducts();
+  // }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     // const formData = new FormData(form.current);
@@ -128,29 +144,54 @@ function PatientPrescription() {
     let billData = billValues;
     eyeData.patient = patientId;
     billData.patient = patientId;
-    billData.lens_type = lensType?.value;
-    billData.lens_for = lensFor?.value;
-    billData.lens_side = lensSide?.value;
-    billData.frame_type = frameType?.value;
-    billData.lens_expiry = lensExpiry;
-    billData.other_items = otherItems;
+
+    let product_values = [];
+    for (let item of selectedOptions) {
+      product_values.push({
+        product: item._id,
+        sold_quantity: item.sold_quantity,
+      });
+    }
+    billData.product_details = product_values;
 
     // formData.forEach((value, key) => (object[key] = value));
     console.log(eyeData);
     console.log(billData);
     const prescriptionResponse = await fetchWrapper.post(
       prescriptionRequestBaseUrl,
-      eyeData
+      eyeData,
+      "Prescription has been created!"
     );
-    const billResponse = await fetchWrapper.post(billRequestBaseUrl, billData);
+    const billResponse = await fetchWrapper.post(
+      billRequestBaseUrl,
+      billData,
+      "Billing has been created!"
+    );
     if (prescriptionResponse && billResponse) {
       setLoading(false);
       navigate("/billing");
     }
   };
 
-  console.log(otherItems);
-  console.log(lensExpiry);
+  function handleSelect(data) {
+    setSelectedOptions(data);
+  }
+
+  // load products list
+  const fetchProducts = async (inputValue) => {
+    const response = await fetchWrapper.get(productBaseUrl);
+    return response;
+  };
+
+  const loadOptions = async (inputValue) => {
+    return fetchProducts(inputValue).then((res) => {
+      return res.filter((i) =>
+        i.product_name.toLowerCase().includes(inputValue.toLowerCase())
+      );
+    });
+  };
+
+  console.log(selectedOptions);
 
   return (
     <Form
@@ -191,7 +232,7 @@ function PatientPrescription() {
             </Col>
           </Row>
         </Alert>
-
+        {/* Eye details */}
         <table
           className="table table-striped table-sm table-bordered"
           style={{ width: "100%" }}
@@ -370,97 +411,31 @@ function PatientPrescription() {
             </tr>
           </tbody>
         </table>
-
+        {/* Product and billing details */}
         <div className="my-3">
-          <div className="h4 mb-3">Frame/Lens Details</div>
+          <div className="h4 mb-3">Select Items</div>
           <Row>
-            <Col md="3">
-              <label>Lens Type</label>
-              <CreatableSelect
-                isClearable
-                options={lens_types}
-                name="lens_type"
-                // value={lensType}
-                defaultValue={lensType}
-                onChange={setLensType}
-              />
-            </Col>
-            <Col md="3">
-              <Form.Group>
-                <Form.Label>Lens Name</Form.Label>
-                <Form.Control
-                  name="lens_name"
-                  value={billValues.lens_name}
-                  onChange={handleBillInputChange}
-                />
-              </Form.Group>
-            </Col>
-            <Col md="3">
-              <label>Lens For</label>
-              <CreatableSelect
-                isClearable
-                options={lens_for}
-                name="lens_for"
-                value={lensFor}
-                onChange={setLensFor}
-              />
-            </Col>
-            <Col md="3">
-              <label>Lens Side</label>
-              <CreatableSelect
-                isClearable
-                options={lens_side}
-                name="lens_side"
-                value={lensSide}
-                onChange={setLensSide}
+            <Col>
+              <AsyncSelect
+                cacheOptions
+                defaultOptions
+                placeholder="Select Items"
+                // value={selectedOptions}
+                onChange={handleSelect}
+                loadOptions={loadOptions}
+                getOptionLabel={(e) =>
+                  e.product_name + ", " + e.product_category
+                }
+                getOptionValue={(e) => e._id}
+                isMulti
               />
             </Col>
           </Row>
-          <Row className="my-3">
-            {lensType?.value === "Contact-lens" ? (
-              <Col md="3">
-                <label>Contact Lens Expiry</label>
-                <DatePicker
-                  name="lens_expiry"
-                  className="form-control"
-                  selected={lensExpiry}
-                  onChange={(date) => {
-                    setLensExpiry(date);
-                  }}
-                />
-              </Col>
-            ) : (
-              ""
-            )}
-            <Col md="3">
-              <label>Frame Type</label>
-              <CreatableSelect
-                isClearable
-                options={frame_types}
-                name="frame_type"
-                value={frameType}
-                onChange={setFrameType}
-              />
-            </Col>
-            <Col md="3">
-              <Form.Group>
-                <Form.Label>Frame Name</Form.Label>
-                <Form.Control
-                  name="frame_name"
-                  value={billValues.frame_name}
-                  onChange={handleBillInputChange}
-                />
-              </Form.Group>
-            </Col>
-            <Col md="3">
-              <label>Other Items</label>
-              <CreatableSelect
-                isMulti
-                isClearable
-                options={other_items}
-                name="other_items"
-                value={otherItems}
-                onChange={setOtherItems}
+          <Row className="mt-3">
+            <Col>
+              <ProductTable
+                data={selectedOptions}
+                setData={setSelectedOptions}
               />
             </Col>
           </Row>
@@ -471,22 +446,12 @@ function PatientPrescription() {
           <Row>
             <Col sm="3">
               <Form.Group>
-                <Form.Label>Lens Price</Form.Label>
+                <Form.Label>Total Amount</Form.Label>
                 <Form.Control
-                  name="lens_price"
+                  name="total_amount"
+                  size="sm"
                   type="text"
-                  value={billValues.lens_price}
-                  onChange={handleBillInputChange}
-                />
-              </Form.Group>
-            </Col>
-            <Col sm="3">
-              <Form.Group>
-                <Form.Label>Frame Price</Form.Label>
-                <Form.Control
-                  name="frame_price"
-                  type="text"
-                  value={billValues.frame_price}
+                  value={billValues.total_amount}
                   onChange={handleBillInputChange}
                 />
               </Form.Group>
@@ -496,54 +461,76 @@ function PatientPrescription() {
                 <Form.Label>Extra Charges</Form.Label>
                 <Form.Control
                   name="extra_charges"
+                  size="sm"
                   type="text"
                   value={billValues.extra_charges}
                   onChange={handleBillInputChange}
                 />
               </Form.Group>
             </Col>
-          </Row>
-          <Row className="mt-2">
-            <Col sm="2">
+            <Col sm="3">
               <Form.Group>
-                <Form.Label className="font-weight-bold">
-                  VAT on Amount
-                </Form.Label>
+                <Form.Label>Discount</Form.Label>
                 <Form.Control
-                  name="apply_vat_amount"
-                  type="text"
-                  value={billValues.apply_vat_amount}
+                  name="discount"
+                  size="sm"
+                  type="number"
+                  value={billValues.discount}
                   onChange={handleBillInputChange}
                 />
               </Form.Group>
             </Col>
-            <Col sm="2">
+            <Col sm="3">
               <Form.Group>
-                <Form.Label className="font-weight-bold">VAT (5%)</Form.Label>
+                <Form.Label className="font-weight-bold">VAT</Form.Label>
                 <Form.Control
                   name="vat"
                   type="text"
+                  size="sm"
                   value={billValues.vat}
                   onChange={handleBillInputChange}
                   readOnly
                 />
               </Form.Group>
             </Col>
-            <Col sm="2">
+          </Row>
+
+          <Row className="mt-2">
+            <Col sm="3">
               <Form.Group>
                 <Form.Label className="font-weight-bold">
-                  Total Amount
+                  Grand Total
                 </Form.Label>
                 <Form.Control
-                  name="total_amount"
+                  name="grand_total"
                   type="text"
-                  value={billValues.total_amount}
+                  size="sm"
+                  value={billValues.grand_total}
                   onChange={handleBillInputChange}
                   readOnly
                 />
               </Form.Group>
             </Col>
-            <Col sm="2">
+            <Col sm="3">
+              <Form.Group>
+                <Form.Label>Payment Type</Form.Label>
+                <Form.Control
+                  size="sm"
+                  as="select"
+                  name="payment_type"
+                  required
+                  value={billValues.payment_type}
+                  onChange={handleBillInputChange}
+                >
+                  <option selected disabled value="">
+                    select
+                  </option>
+                  <option value="Cash">Cash</option>
+                  <option value="Visa">Visa</option>
+                </Form.Control>
+              </Form.Group>
+            </Col>
+            <Col sm="3">
               <Form.Group>
                 <Form.Label className="font-weight-bold">
                   Paid Amount
@@ -551,12 +538,13 @@ function PatientPrescription() {
                 <Form.Control
                   name="paid_amount"
                   type="text"
+                  size="sm"
                   value={billValues.paid_amount}
                   onChange={handleBillInputChange}
                 />
               </Form.Group>
             </Col>
-            <Col sm="2">
+            <Col sm="3">
               <Form.Group>
                 <Form.Label className="font-weight-bold">
                   Balance Amount
@@ -564,6 +552,7 @@ function PatientPrescription() {
                 <Form.Control
                   name="balance_amount"
                   type="text"
+                  size="sm"
                   value={billValues.balance_amount}
                   onChange={handleBillInputChange}
                   readOnly

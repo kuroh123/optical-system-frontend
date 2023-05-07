@@ -31,9 +31,6 @@ function NavbarComponent() {
         <Nav className="me-auto">
           <Nav.Link href="/billing">Billing</Nav.Link>
         </Nav>
-        <Nav className="me-auto">
-          <Nav.Link href="/test">Direct Billing</Nav.Link>
-        </Nav>
         <NavDropdown title="Inventory" id="nav-dropdown" className="nav-item">
           <NavDropdown.Item href="/products" eventKey="4.1">
             Products
