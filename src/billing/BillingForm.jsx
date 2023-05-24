@@ -27,6 +27,7 @@ const BillingForm = ({ modalShow, setModalShow, fetchBilling }) => {
   const patientInitialData = {
     first_name: "",
     last_name: "",
+    mobile: "",
   };
 
   const [billValues, setBillValues] = useState(billInitialValues);
@@ -164,6 +165,19 @@ const BillingForm = ({ modalShow, setModalShow, fetchBilling }) => {
                   value={patientData.last_name.toUpperCase()}
                   onChange={handlePatientInputChange}
                   placeholder="Enter last name"
+                />
+              </Form.Group>
+            </Col>
+            <Col md={4} className="mb-2">
+              <Form.Group>
+                <Form.Label>Mobile Number</Form.Label>
+                <Form.Control
+                  name="mobile"
+                  type="number"
+                  size="sm"
+                  // value={patientData.last_name}
+                  onChange={handlePatientInputChange}
+                  placeholder="Enter mobile"
                 />
               </Form.Group>
             </Col>
