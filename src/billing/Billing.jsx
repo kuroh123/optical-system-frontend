@@ -1,6 +1,6 @@
 import moment from "moment";
 import { useEffect, useState, useRef } from "react";
-import { Button, Col, Form, Row, Spinner } from "react-bootstrap";
+import { Button, Col, Form, Modal, Row, Spinner } from "react-bootstrap";
 import DataTable from "react-data-table-component";
 import { Link, Outlet, useParams } from "react-router-dom";
 import ReactSelect from "react-select";
@@ -10,6 +10,8 @@ import { payment_status, status } from "_helpers/eye-details";
 import BillingForm from "./BillingForm";
 import ReactToPrint from "react-to-print";
 import PrintBill from "./PrintBill";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export { Billing };
 
@@ -17,8 +19,9 @@ const Billing = () => {
   const { billingId } = useParams();
   const baseUrl = `${process.env.REACT_APP_API_URL}/billing`;
   const [billing, setBilling] = useState([]);
-  const [billId, setBillId] = useState("");
+  const [printData, setPrintData] = useState(null);
   const [modalShow, setModalShow] = useState(false);
+  const [printModal, setPrintModal] = useState(false);
   const [startDateTime, setStartDateTime] = useState(
     moment().format("YYYY-MM-01T00:00:00Z")
   );
@@ -26,7 +29,8 @@ const Billing = () => {
     moment(new Date()).format("YYYY-MM-DDTHH:mm:ssZ")
   );
 
-  const printBillRef = useRef();
+  const printBillRef = useRef(null);
+  const test = useRef(null);
 
   const [filter, setFilter] = useState({
     bill_no: "",
@@ -98,6 +102,15 @@ const Billing = () => {
   ];
 
   // const handleShow = () => setShow(true);
+  const handlePrintData = (id) => {
+    const data = billing?.find((elem) => elem._id === id);
+    if (data) {
+      setPrintModal(true);
+      setPrintData(data);
+    } else {
+      toast.error("Could not print invoice!");
+    }
+  };
 
   const handleDelete = async (id) => {
     const response = await fetchWrapper.delete(baseUrl + "/" + id);
@@ -210,17 +223,11 @@ const Billing = () => {
             to={`/billing/${row._id}`}
             id={row.id}
           ></Button>
-          <div className="ml-3">
-            <ReactToPrint
-              trigger={() => (
-                <Button className="btn-success fa fa-print" size="sm" />
-              )}
-              content={() => printBillRef.current}
-            />
-            <div style={{ display: "none" }}>
-              <PrintBill ref={printBillRef} row={row.id} />
-            </div>
-          </div>
+          <Button
+            className="ml-3 btn-success fa fa-print"
+            size="sm"
+            onClick={() => handlePrintData(row._id)}
+          />
           <Button
             className="ml-3 btn-danger fa fa-trash"
             size="sm"
@@ -236,11 +243,20 @@ const Billing = () => {
     },
   ];
 
+  console.log("PDF", printBillRef);
+
   if (billingId) {
     return <Outlet />;
   }
   return (
     <>
+      <ReactToPrint
+        trigger={() => {
+          return <Button className="btn-success fa fa-print" size="sm" />;
+        }}
+        content={() => test.current}
+      />
+      <div ref={test}>nyanya</div>
       <div className="">
         <ModuleDatePicker
           startDateTime={startDateTime}
@@ -329,6 +345,42 @@ const Billing = () => {
         setModalShow={setModalShow}
         fetchBilling={fetchBilling}
       />
+      <Modal
+        show={printModal}
+        size="sm"
+        onHide={() => setPrintModal(false)}
+        centered
+      >
+        <Modal.Header>Print inovice</Modal.Header>
+        <Modal.Body>
+          <ReactToPrint
+            trigger={() => {
+              return (
+                <div className="d-flex justify-content-center">
+                  <Button className="btn-success" size="sm">
+                    Print Invoice
+                  </Button>
+                </div>
+              );
+            }}
+            content={() => printBillRef.current}
+          />
+          <div style={{ display: "none" }}>
+            <PrintBill ref={printBillRef} printData={printData} />
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <div>
+            <Button
+              variant="danger"
+              size="sm"
+              onClick={() => setPrintModal(false)}
+            >
+              Close
+            </Button>
+          </div>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };

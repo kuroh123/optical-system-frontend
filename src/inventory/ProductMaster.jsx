@@ -439,7 +439,7 @@ function ProductMaster() {
                     />
                   </Form.Group>
                 </Col>
-                <Col sm="6">
+                {/* <Col sm="6">
                   <Form.Group>
                     <Form.Label>Profit (RE)</Form.Label>
                     <Form.Control
@@ -450,8 +450,8 @@ function ProductMaster() {
                       disabled
                     />
                   </Form.Group>
-                </Col>
-                <Col sm="6">
+                </Col> */}
+                <Col sm={{ offset: 6 }}>
                   <Form.Group>
                     <Form.Label>Stocked on</Form.Label>
                     <Form.Control
