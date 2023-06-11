@@ -243,20 +243,11 @@ const Billing = () => {
     },
   ];
 
-  console.log("PDF", printBillRef);
-
   if (billingId) {
     return <Outlet />;
   }
   return (
     <>
-      <ReactToPrint
-        trigger={() => {
-          return <Button className="btn-success fa fa-print" size="sm" />;
-        }}
-        content={() => test.current}
-      />
-      <div ref={test}>nyanya</div>
       <div className="">
         <ModuleDatePicker
           startDateTime={startDateTime}

@@ -19,10 +19,12 @@ import { gender } from "_helpers/eye-details";
 import DataTable from "react-data-table-component";
 import FormModal from "_components/FormModal";
 import moment from "moment";
+import { useSelector } from "react-redux";
 
 export { ProductMaster };
 
 function ProductMaster() {
+  const user = useSelector((x) => x.auth.user.user);
   const form = useRef();
   const navigate = useNavigate();
   const baseUrl = `${process.env.REACT_APP_API_URL}/product`;
@@ -160,7 +162,9 @@ function ProductMaster() {
   };
 
   const fetchProducts = async () => {
-    const response = await fetchWrapper.get(baseUrl);
+    const response = await fetchWrapper.get(
+      baseUrl + (user.location ? `?location=${user.location?._id}` : "")
+    );
     if (response) {
       setProducts(response);
       setFilter({ list: response });
@@ -197,7 +201,7 @@ function ProductMaster() {
       console.log(response);
     } else {
       response = await fetchWrapper.post(
-        baseUrl,
+        baseUrl + (user.location ? `?location=${user.location?._id}` : ""),
         object,
         "Product has been created!"
       );
@@ -314,6 +318,7 @@ function ProductMaster() {
                   </option>
                   <option value="lens">Lens</option>
                   <option value="frame">Frame</option>
+                  <option value="sunglasses">Sun-glasses</option>
                   <option value="contanct lens">Contanct lens</option>
                   <option value="cleaning solution">Cleaning solution</option>
                   <option value="accessories">Accessories</option>
