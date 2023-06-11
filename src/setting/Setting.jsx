@@ -35,7 +35,6 @@ const Setting = () => {
     fetchLocations();
   }, []);
 
-  console.log(user.user.location.name);
   return (
     <Container>
       <Row>
