@@ -23,6 +23,7 @@ import { Billing } from "billing/Billing";
 import { Dashboard } from "home/Dashboard";
 import { EditBilling } from "billing/EditBilling";
 import { ProductMaster } from "inventory/ProductMaster";
+import Setting from "setting/Setting";
 // import { RegisterPatient } from "patient";
 
 export { App };
@@ -107,6 +108,14 @@ function App() {
             element={
               <PrivateRoute>
                 <ProductMaster />
+              </PrivateRoute>
+            }
+          ></Route>
+          <Route
+            path="/setting"
+            element={
+              <PrivateRoute>
+                <Setting />
               </PrivateRoute>
             }
           ></Route>

@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import ModuleDatePicker from "_components/ModuleDatePicker";
 import { fetchWrapper } from "_helpers";
+import { useSelector } from "react-redux";
 
 export { Dashboard };
 
 function Dashboard() {
+  const user = useSelector((x) => x.auth.user);
   const baseUrl = `${process.env.REACT_APP_API_URL}/dashboard`;
   const [startDateTime, setStartDateTime] = useState(
     moment().format("YYYY-MM-01T00:00:00Z")
@@ -32,13 +34,18 @@ function Dashboard() {
 
   return (
     <div className="mr-5">
-      <ModuleDatePicker
-        startDateTime={startDateTime}
-        endDateTime={endDateTime}
-        setStartDateTime={setStartDateTime}
-        setEndDateTime={setEndDateTime}
-        fetchData={fetchDashboard}
-      />
+      <div className="d-flex">
+        <ModuleDatePicker
+          startDateTime={startDateTime}
+          endDateTime={endDateTime}
+          setStartDateTime={setStartDateTime}
+          setEndDateTime={setEndDateTime}
+          fetchData={fetchDashboard}
+        />
+        <div className="ml-auto">
+          Location: {user.user.location ? user.user.location.name : "None"}
+        </div>
+      </div>
       <div fluid>
         <Row className="">
           <Col sm="3" className="card bg-info text-white">
