@@ -24,6 +24,7 @@ import { Dashboard } from "home/Dashboard";
 import { EditBilling } from "billing/EditBilling";
 import { ProductMaster } from "inventory/ProductMaster";
 import Setting from "setting/Setting";
+import { login_bg } from "assets";
 // import { RegisterPatient } from "patient";
 
 export { App };
@@ -35,7 +36,7 @@ function App() {
   return (
     <div className="app-container bg-light">
       <NavbarComponent />
-      <div className="container pt-4 pb-4">
+      <div style={{}}>
         <Routes>
           <Route
             path="/"
