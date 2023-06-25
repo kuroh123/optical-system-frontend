@@ -1,5 +1,13 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+
+body {
+  height: 100%;
+  font-family: "Inter", sans-serif;
+  /* background-color: aqua !important; */
+}
+
 .app-container {
-  min-height: 350px;
+  min-height: 100vh;
 }
 
 .form-inline label {
@@ -11,9 +19,35 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #d9d9d9 inset !important;
+}
 
 @media screen {
   .hide-print {
     visibility: hidden;
   }
+}
+
+.input-icons i {
+  position: absolute;
+}
+
+.input-icons {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.icon {
+  padding: 10px;
+  min-width: 40px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  text-align: center;
 }

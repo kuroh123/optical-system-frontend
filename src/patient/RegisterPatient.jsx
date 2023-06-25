@@ -48,72 +48,73 @@ function RegisterPatient() {
   };
 
   return (
-    <Form ref={form} onSubmit={(e) => handleSubmit(e)}>
-      <Container fluid>
-        <h2 className="text-center">Register Patient</h2>
-        <Row className="mb-3 mt-4">
-          <Col md={{ span: 6, offset: 3 }} className="mb-2">
-            <Form.Group>
-              <Form.Label>First name</Form.Label>
-              <Form.Control
-                required
-                size="sm"
-                name="first_name"
-                type="text"
-                value={firstName.toUpperCase()}
-                onChange={(e) => setFirstName(e.target.value)}
-                placeholder="Enter first name"
-              />
-            </Form.Group>
-          </Col>
-          <Col md={{ span: 6, offset: 3 }} className="mb-2">
-            <Form.Group>
-              <Form.Label>Last Name</Form.Label>
-              <Form.Control
-                name="last_name"
-                type="text"
-                size="sm"
-                value={lastName.toUpperCase()}
-                onChange={(e) => setLastName(e.target.value)}
-                placeholder="Enter last name"
-              />
-            </Form.Group>
-          </Col>
-          <Col md={{ span: 6, offset: 3 }} className="mb-2">
-            <Form.Group>
-              <Form.Label>Mobile</Form.Label>
-              <Form.Control
-                required
-                size="sm"
-                name="mobile"
-                type="number"
-                placeholder="Enter Mobile no."
-              />
-            </Form.Group>
-          </Col>
-          <Col md={{ span: 6, offset: 3 }} className="mb-2">
-            <Form.Group>
-              <Form.Label>Examined By</Form.Label>
-              <Form.Control
-                name="examined_by"
-                size="sm"
-                type="text"
-                placeholder="Examined By"
-              />
-            </Form.Group>
-          </Col>
-          <Col md={{ span: 6, offset: 3 }} className="mb-2">
-            <Form.Group>
-              <Form.Label>Address</Form.Label>
-              <Form.Control
-                name="address"
-                size="sm"
-                type="textarea"
-                placeholder="Enter Address"
-              />
-            </Form.Group>
-          </Col>
-          {/* <Col sm="4">
+    <div className="container pt-4 pb-4">
+      <Form ref={form} onSubmit={(e) => handleSubmit(e)}>
+        <Container fluid>
+          <h2 className="text-center">Register Patient</h2>
+          <Row className="mb-3 mt-4">
+            <Col md={{ span: 6, offset: 3 }} className="mb-2">
+              <Form.Group>
+                <Form.Label>First name</Form.Label>
+                <Form.Control
+                  required
+                  size="sm"
+                  name="first_name"
+                  type="text"
+                  value={firstName.toUpperCase()}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  placeholder="Enter first name"
+                />
+              </Form.Group>
+            </Col>
+            <Col md={{ span: 6, offset: 3 }} className="mb-2">
+              <Form.Group>
+                <Form.Label>Last Name</Form.Label>
+                <Form.Control
+                  name="last_name"
+                  type="text"
+                  size="sm"
+                  value={lastName.toUpperCase()}
+                  onChange={(e) => setLastName(e.target.value)}
+                  placeholder="Enter last name"
+                />
+              </Form.Group>
+            </Col>
+            <Col md={{ span: 6, offset: 3 }} className="mb-2">
+              <Form.Group>
+                <Form.Label>Mobile</Form.Label>
+                <Form.Control
+                  required
+                  size="sm"
+                  name="mobile"
+                  type="number"
+                  placeholder="Enter Mobile no."
+                />
+              </Form.Group>
+            </Col>
+            <Col md={{ span: 6, offset: 3 }} className="mb-2">
+              <Form.Group>
+                <Form.Label>Examined By</Form.Label>
+                <Form.Control
+                  name="examined_by"
+                  size="sm"
+                  type="text"
+                  placeholder="Examined By"
+                />
+              </Form.Group>
+            </Col>
+            <Col md={{ span: 6, offset: 3 }} className="mb-2">
+              <Form.Group>
+                <Form.Label>Address</Form.Label>
+                <Form.Control
+                  name="address"
+                  size="sm"
+                  type="textarea"
+                  placeholder="Enter Address"
+                />
+              </Form.Group>
+            </Col>
+            {/* <Col sm="4">
             <div className="form-group">
               <label>DOB</label>
               <DatePicker
@@ -140,30 +141,31 @@ function RegisterPatient() {
               />
             </Form.Group>
           </Col> */}
-          <Col md={{ span: 6, offset: 3 }}>
-            <Form.Group>
-              <Form.Label>Gender</Form.Label>
-              <select
-                className="form-control form-control-sm"
-                name="gender"
-                type="select"
-              >
-                <option selected disabled>
-                  Select Gender
-                </option>
-                {gender.map((elem) => (
-                  <option value={elem.value}>{elem.label}</option>
-                ))}
-              </select>
-            </Form.Group>
-          </Col>
-        </Row>
-        <div className="d-flex justify-content-center align-items-center mt-3">
-          <Button className="btn btn-success" type="submit">
-            Save & Close
-          </Button>
-        </div>
-      </Container>
-    </Form>
+            <Col md={{ span: 6, offset: 3 }}>
+              <Form.Group>
+                <Form.Label>Gender</Form.Label>
+                <select
+                  className="form-control form-control-sm"
+                  name="gender"
+                  type="select"
+                >
+                  <option selected disabled>
+                    Select Gender
+                  </option>
+                  {gender.map((elem) => (
+                    <option value={elem.value}>{elem.label}</option>
+                  ))}
+                </select>
+              </Form.Group>
+            </Col>
+          </Row>
+          <div className="d-flex justify-content-center align-items-center mt-3">
+            <Button className="btn btn-success" type="submit">
+              Save & Close
+            </Button>
+          </div>
+        </Container>
+      </Form>
+    </div>
   );
 }
