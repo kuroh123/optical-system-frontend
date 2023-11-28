@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { authActions } from "_store";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
+import { sultan_logo } from "assets";
 
 export { NavbarComponent };
 
@@ -15,20 +16,21 @@ function NavbarComponent() {
   if (!authUser) return null;
 
   return (
-    <Navbar className="navbar navbar-expand navbar-dark bg-dark">
+    <Navbar
+      className="navbar navbar-expand navbar-dark p-1"
+      style={{ backgroundColor: "#0c4d0c" }}
+    >
       <div>
         <Nav className="navbar-nav" activeKey="/">
+          <Nav.Item className="">
+            <img src={sultan_logo} alt="Sultan" width={60} height={45} />
+          </Nav.Item>
           <Nav.Item className="nav-item">
             <Nav.Link href="/">Dashboard</Nav.Link>
           </Nav.Item>
-          <NavDropdown title="Patient" id="nav-dropdown" className="nav-item">
-            <NavDropdown.Item href="/register" eventKey="4.1">
-              Register Patient
-            </NavDropdown.Item>
-            <NavDropdown.Item href="/patient" eventKey="4.2">
-              Patient Summary
-            </NavDropdown.Item>
-          </NavDropdown>
+          <Nav.Item className="nav-item">
+            <Nav.Link href="/customer">Customer</Nav.Link>
+          </Nav.Item>
           <Nav className="me-auto">
             <Nav.Link href="/billing">Billing</Nav.Link>
           </Nav>
@@ -36,16 +38,15 @@ function NavbarComponent() {
             <NavDropdown.Item href="/products" eventKey="4.1">
               Products
             </NavDropdown.Item>
-            <NavDropdown.Item href="/xyz" eventKey="4.2">
-              xyz
+          </NavDropdown>
+          <NavDropdown title="Setting" id="nav-dropdown" className="nav-item">
+            <NavDropdown.Item href="/setting/users" eventKey="4.1">
+              Users
             </NavDropdown.Item>
           </NavDropdown>
         </Nav>
       </div>
-      <div className="d-flex ml-auto">
-        <Nav>
-          <Nav.Link href="/setting">Setting</Nav.Link>
-        </Nav>
+      <div className="ms-auto">
         <Nav className="navbar-nav">
           <Nav.Item className="nav-item">
             <button onClick={logout} className="btn btn-link nav-item nav-link">

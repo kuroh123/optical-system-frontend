@@ -4,6 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useSelector, useDispatch } from "react-redux";
 import { login_bg, login_icon, login_icon_btn } from "assets";
+// import {  } from "react-icons/bs";
 
 import { history } from "_helpers";
 import { authActions } from "_store";
@@ -68,7 +69,7 @@ function Login() {
         />
         <div>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-group d-flex justify-content-center mt-5">
+            <div className="form-group d-flex justify-content-center my-4">
               <button
                 disabled
                 style={styles.buttonIcon}
@@ -105,15 +106,14 @@ function Login() {
               <div className="invalid-feedback">{errors.password?.message}</div>
             </div>
             <div className="d-flex justify-content-center">
-              <span
+              {/* <span
                 style={{ position: "absolute", margin: "31px 0px 0px 50px" }}
               >
-                <img src={login_icon_btn} width={35} height={25} />
-              </span>
+              </span> */}
               <button
                 style={styles.loginButton}
                 disabled={isSubmitting}
-                className="mt-4"
+                className="mt-5"
               >
                 {isSubmitting && (
                   <span className="spinner-border spinner-border-sm mr-1"></span>
@@ -154,6 +154,7 @@ const styles = {
     border: "none",
   },
   _buttonIcon: {
+    width: "28px",
     border: "None",
     background: "#D9D9D9",
     color: "black",
@@ -173,7 +174,6 @@ const styles = {
     fontWeight: "500",
     lineHeight: "27px",
     color: "#FFFFFF",
-    textAlign: "left",
     border: "none",
   },
 };

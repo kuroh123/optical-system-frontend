@@ -1,6 +1,14 @@
 import moment from "moment";
 import { useEffect, useState, useRef } from "react";
-import { Button, Col, Form, Modal, Row, Spinner } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  Container,
+  Form,
+  Modal,
+  Row,
+  Spinner,
+} from "react-bootstrap";
 import DataTable from "react-data-table-component";
 import { Link, Outlet, useParams } from "react-router-dom";
 import ReactSelect from "react-select";
@@ -22,12 +30,6 @@ const Billing = () => {
   const [printData, setPrintData] = useState(null);
   const [modalShow, setModalShow] = useState(false);
   const [printModal, setPrintModal] = useState(false);
-  const [startDateTime, setStartDateTime] = useState(
-    moment().format("YYYY-MM-01T00:00:00Z")
-  );
-  const [endDateTime, setEndDateTime] = useState(
-    moment(new Date()).format("YYYY-MM-DDTHH:mm:ssZ")
-  );
 
   const printBillRef = useRef(null);
   const test = useRef(null);
@@ -41,9 +43,7 @@ const Billing = () => {
   });
 
   const fetchBilling = async () => {
-    const response = await fetchWrapper.get(
-      `${baseUrl}?startDate=${startDateTime}&endDate=${endDateTime}`
-    );
+    const response = await fetchWrapper.get(`${baseUrl}`);
     if (response) {
       setBilling(response);
       setFilter({ list: response });
@@ -52,7 +52,7 @@ const Billing = () => {
 
   useEffect(() => {
     fetchBilling();
-  }, [startDateTime, endDateTime]);
+  }, []);
   console.log(billing);
 
   const customStyles = {
@@ -146,7 +146,7 @@ const Billing = () => {
   const filterMobile = (e) => {
     const results = billing.filter((item) => {
       if (e.target.value === "") return billing;
-      return item.patient.mobile.toString().includes(e.target.value);
+      return item.patient.mobile?.toString().includes(e.target.value);
     });
     setFilter({
       mobile: e.target.value,
@@ -155,12 +155,13 @@ const Billing = () => {
   };
 
   const filterPaymentStatus = (e) => {
+    console.log(e);
     const results = billing.filter((item) => {
-      if (e.value === "") return billing;
-      return item.payment_status.toString() === e.value;
+      if (!e || e.value === "") return billing;
+      return item.payment_status.toString() === e?.value;
     });
     setFilter({
-      payment_status: e.value,
+      payment_status: e?.value,
       list: results,
     });
   };
@@ -224,12 +225,12 @@ const Billing = () => {
             id={row.id}
           ></Button>
           <Button
-            className="ml-3 btn-success fa fa-print"
+            className="mx-3 btn-success fa fa-print"
             size="sm"
             onClick={() => handlePrintData(row._id)}
           />
           <Button
-            className="ml-3 btn-danger fa fa-trash"
+            className="btn-danger fa fa-trash"
             size="sm"
             onClick={() => handleDelete(row._id)}
             id={row._id}
@@ -247,21 +248,15 @@ const Billing = () => {
     return <Outlet />;
   }
   return (
-    <>
-      <div className="">
-        <ModuleDatePicker
-          startDateTime={startDateTime}
-          endDateTime={endDateTime}
-          setStartDateTime={setStartDateTime}
-          setEndDateTime={setEndDateTime}
-          fetchData={fetchBilling}
-        />
+    <Container>
+      <div>
         <Form>
           <Row className="mb-3 mt-4">
             <Col sm="2">
               <Form.Group>
                 <Form.Label>Search By Bill No</Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   name="bill_no"
                   size="sm"
                   type="search"
@@ -274,6 +269,7 @@ const Billing = () => {
               <Form.Group>
                 <Form.Label>Search By Name</Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   name="first_name"
                   size="sm"
                   type="search"
@@ -286,6 +282,7 @@ const Billing = () => {
               <Form.Group>
                 <Form.Label>Search By Mobile</Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   name="mobile"
                   size="sm"
                   type="search"
@@ -294,15 +291,18 @@ const Billing = () => {
                 />
               </Form.Group>
             </Col>
-            <Col sm="2" className="ml-auto mb-1">
+            <Col sm="2" className="ms-auto mb-1">
               <div className="form-group">
-                <label>Payment Status</label>
-                <ReactSelect
-                  name="payment_status"
-                  options={status}
-                  setValue={filter.payment_status}
-                  onChange={filterPaymentStatus}
-                />
+                <div className="form-control-sm">
+                  <label>Payment Status</label>
+                  <ReactSelect
+                    name="payment_status"
+                    options={status}
+                    setValue={filter.payment_status}
+                    onChange={filterPaymentStatus}
+                    isClearable
+                  />
+                </div>
               </div>
             </Col>
           </Row>
@@ -319,7 +319,6 @@ const Billing = () => {
           conditionalRowStyles={conditionalRowStyles}
           columns={columns}
           customStyles={customStyles}
-          defaultSortFieldId={1}
           dense
           responsive
           pagination
@@ -338,16 +337,19 @@ const Billing = () => {
       />
       <Modal
         show={printModal}
-        size="sm"
+        size="md"
         onHide={() => setPrintModal(false)}
         centered
       >
-        <Modal.Header>Print inovice</Modal.Header>
-        <Modal.Body>
+        <Modal.Body className="d-flex flex-column justify-content-center">
+          <div>
+            Print inovice for {printData?.patient.first_name}{" "}
+            {printData?.patient.last_name}
+          </div>
           <ReactToPrint
             trigger={() => {
               return (
-                <div className="d-flex justify-content-center">
+                <div className="d-flex justify-content-center mt-3">
                   <Button className="btn-success" size="sm">
                     Print Invoice
                   </Button>
@@ -360,18 +362,7 @@ const Billing = () => {
             <PrintBill ref={printBillRef} printData={printData} />
           </div>
         </Modal.Body>
-        <Modal.Footer>
-          <div>
-            <Button
-              variant="danger"
-              size="sm"
-              onClick={() => setPrintModal(false)}
-            >
-              Close
-            </Button>
-          </div>
-        </Modal.Footer>
       </Modal>
-    </>
+    </Container>
   );
 };

@@ -51,3 +51,25 @@ input:-webkit-autofill:active {
   padding: 10px;
   text-align: center;
 }
+
+.table-button {
+  background-color: #587acb;
+  color: #fff; /* Text color */
+  padding: 2px 6px; /* Adjust the padding to your preference */
+  border: none;
+  border-radius: 5px; /* Rounded corners */
+  /* box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); Box shadow properties/ */
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s; /* Add smooth transitions */
+}
+
+/* Hover effect to change background color and box shadow */
+.table-button:hover {
+  background-color: #456799; /* Change the color on hover */
+  /* box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3); Adjust the box shadow on hover */
+}
+
+.modalCrossBtn {
+  right: 15px;
+  top: 15px;
+}

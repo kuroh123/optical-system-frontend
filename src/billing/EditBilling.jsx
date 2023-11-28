@@ -90,6 +90,7 @@ function EditBilling() {
               <Form.Group>
                 <Form.Label>Lens Price</Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   name="lens_price"
                   type="text"
                   value={billingData?.lens_price}
@@ -101,6 +102,7 @@ function EditBilling() {
               <Form.Group>
                 <Form.Label>Frame Price</Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   name="frame_price"
                   type="text"
                   value={billingData?.frame_price}
@@ -112,6 +114,7 @@ function EditBilling() {
               <Form.Group>
                 <Form.Label>Extra Charges</Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   name="extra_charges"
                   type="text"
                   value={billingData?.extra_charges}
@@ -139,6 +142,7 @@ function EditBilling() {
                   VAT on Amount
                 </Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   defaultValue={0}
                   name="apply_vat_amount"
                   type="text"
@@ -151,6 +155,7 @@ function EditBilling() {
               <Form.Group>
                 <Form.Label className="font-weight-bold">VAT (5%)</Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   name="vat"
                   type="text"
                   value={billingData?.vat}
@@ -165,6 +170,7 @@ function EditBilling() {
                   Total Amount
                 </Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   name="total_amount"
                   type="text"
                   value={billingData?.total_amount}
@@ -179,6 +185,7 @@ function EditBilling() {
                   Paid Amount
                 </Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   name="paid_amount"
                   type="text"
                   value={billingData?.paid_amount}
@@ -192,6 +199,7 @@ function EditBilling() {
                   Balance Amount
                 </Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   name="balance_amount"
                   type="text"
                   value={billingData?.balance_amount}

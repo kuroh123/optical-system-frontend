@@ -36,13 +36,14 @@ const Setting = () => {
   }, []);
 
   return (
-    <Container>
+    <Container className="my-4">
       <Row>
         <Col sm="4">
           <Form.Group>
             <Form.Label>Set Location</Form.Label>
             <div className="d-flex">
               <Form.Control
+                autoComplete="off"
                 size="sm"
                 as="select"
                 name="product_category"

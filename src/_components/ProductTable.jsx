@@ -40,6 +40,7 @@ const ProductTable = ({ data, setData }) => {
       cell: (row, index) => {
         return (
           <Form.Control
+            autoComplete="off"
             name="quantity"
             type="number"
             size="sm"
@@ -61,6 +62,7 @@ const ProductTable = ({ data, setData }) => {
       cell: (row, index) => {
         return (
           <Form.Control
+            autoComplete="off"
             name="discount"
             type="number"
             size="sm"

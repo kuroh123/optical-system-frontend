@@ -6,26 +6,26 @@ import Modal from "react-bootstrap/Modal";
 import { useParams } from "react-router-dom";
 import { fetchWrapper } from "_helpers";
 
-export { ViewPrescription };
+export { ViewEyeDetails };
 
-function ViewPrescription({ show, setShow, id }) {
-  const baseUrl = `${process.env.REACT_APP_API_URL}/patientrequest`;
-  const [prescriptionData, setPrescriptionData] = useState([]);
+function ViewEyeDetails({ show, setShow, id }) {
+  const baseUrl = `${process.env.REACT_APP_API_URL}/eyeDetails`;
+  const [eyeDetailData, setEyeDetailData] = useState([]);
 
-  const fetchPrescription = async () => {
+  const fetchEyeDetails = async () => {
     const response = await fetchWrapper.get(baseUrl + "?patient=" + id);
     if (response) {
-      setPrescriptionData(response);
+      setEyeDetailData(response);
     }
   };
 
   useEffect(() => {
     if (id) {
-      fetchPrescription();
+      fetchEyeDetails();
     }
   }, [id]);
 
-  console.log(prescriptionData);
+  console.log(eyeDetailData);
   const handleClose = () => {
     setShow(false);
   };
@@ -34,22 +34,24 @@ function ViewPrescription({ show, setShow, id }) {
     <>
       <Modal show={show} onHide={handleClose} size="lg" centered>
         <Modal.Header>
-          <b>
-            Patient - {prescriptionData[0]?.patient?.first_name}{" "}
-            {prescriptionData[0]?.patient?.last_name}
-          </b>
+          {eyeDetailData.length && (
+            <b>
+              Customer - {eyeDetailData[0]?.patient?.first_name}{" "}
+              {eyeDetailData[0]?.patient?.last_name}
+            </b>
+          )}
         </Modal.Header>
         <Modal.Body>
-          {prescriptionData.length > 0 &&
-            prescriptionData.map((data) => (
+          {eyeDetailData.length > 0 &&
+            eyeDetailData.map((data) => (
               <Alert variant="secondary">
                 <Row className="d-flex justify-content-between">
-                  <Col sm="4">
+                  {/* <Col sm="4">
                     <Alert variant="dark">
                       Prescription No. {data.prescription_no}
                     </Alert>
-                  </Col>
-                  <Col sm="5">
+                  </Col> */}
+                  <Col sm={{ offset: 4 }}>
                     <Alert variant="dark">
                       Date:{" "}
                       {moment(data.created_at).format("DD-MM-YYYY h:mm a")}
@@ -89,7 +91,7 @@ function ViewPrescription({ show, setShow, id }) {
                     </tr>
                   </tbody>
                 </Table>
-                <p>{data?.prescription_remark}</p>
+                {/* <p>{data?.prescription_remark}</p> */}
               </Alert>
             ))}
         </Modal.Body>

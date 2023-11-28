@@ -52,7 +52,7 @@ function ProductMaster() {
   const columns = [
     {
       name: "S. no.",
-      selector: (row) => row?.product_no,
+      selector: (row, index) => index + 1,
       sortable: true,
       width: "65px",
     },
@@ -110,13 +110,6 @@ function ProductMaster() {
       selector: null,
       cell: (row, index) => (
         <div className="d-flex">
-          {/* <Button
-            className="btn-success fa fa-eye"
-            size="sm"
-            as={Link}
-            to={`/patient/${row._id}`}
-            id={row._id}
-          /> */}
           <Button
             className="ml-3 btn-warning fa fa-edit"
             size="sm"
@@ -210,6 +203,7 @@ function ProductMaster() {
     if (response) {
       setModalShow(false);
       fetchProducts();
+      cleanupFn();
     }
   };
 
@@ -250,13 +244,14 @@ function ProductMaster() {
   }, []);
 
   return (
-    <>
+    <Container>
       <div className="d-flex justify-content-between align-items-center mb-3 mt-4">
         <Form>
           <Row className="">
             <Col>
               <Form.Group>
                 <Form.Control
+                  autoComplete="off"
                   name="productName"
                   size="sm"
                   type="search"
@@ -282,6 +277,7 @@ function ProductMaster() {
               <Form.Group>
                 <Form.Label>Product Code</Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   size="sm"
                   name="product_code"
                   type="text"
@@ -294,6 +290,7 @@ function ProductMaster() {
               <Form.Group>
                 <Form.Label>Product Name</Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   required
                   size="sm"
                   name="product_name"
@@ -307,6 +304,7 @@ function ProductMaster() {
               <Form.Group>
                 <Form.Label>Category</Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   size="sm"
                   as="select"
                   name="product_category"
@@ -331,6 +329,7 @@ function ProductMaster() {
               <Form.Group>
                 <Form.Label>Brand</Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   size="sm"
                   name="brand"
                   type="text"
@@ -343,6 +342,7 @@ function ProductMaster() {
               <Form.Group>
                 <Form.Label>Description</Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   size="sm"
                   name="description"
                   as="textarea"
@@ -359,6 +359,7 @@ function ProductMaster() {
                   <Form.Group>
                     <Form.Label>Product For</Form.Label>
                     <Form.Control
+                      autoComplete="off"
                       size="sm"
                       as="select"
                       name="product_for"
@@ -379,6 +380,7 @@ function ProductMaster() {
                   <Form.Group>
                     <Form.Label>Ordered Qty.</Form.Label>
                     <Form.Control
+                      autoComplete="off"
                       size="sm"
                       name="ordered_quantity"
                       type="number"
@@ -392,6 +394,7 @@ function ProductMaster() {
                   <Form.Group>
                     <Form.Label>Current Qty.</Form.Label>
                     <Form.Control
+                      autoComplete="off"
                       size="sm"
                       name="current_quantity"
                       defaultValue={values?.current_quantity}
@@ -404,6 +407,7 @@ function ProductMaster() {
                   <Form.Group>
                     <Form.Label>Reorder Level</Form.Label>
                     <Form.Control
+                      autoComplete="off"
                       size="sm"
                       name="reorder_level"
                       type="number"
@@ -418,8 +422,9 @@ function ProductMaster() {
               <Row className="align-items-center">
                 <Col sm="6">
                   <Form.Group>
-                    <Form.Label>Purchase Cost</Form.Label>
+                    <Form.Label>Purchase Cost (per unit)</Form.Label>
                     <Form.Control
+                      autoComplete="off"
                       size="sm"
                       name="supplier_cost"
                       type="number"
@@ -432,8 +437,9 @@ function ProductMaster() {
                 </Col>
                 <Col sm="6">
                   <Form.Group>
-                    <Form.Label>Selling Price</Form.Label>
+                    <Form.Label>Selling Price (per unit)</Form.Label>
                     <Form.Control
+                      autoComplete="off"
                       size="sm"
                       name="selling_price"
                       type="number"
@@ -445,22 +451,11 @@ function ProductMaster() {
                     />
                   </Form.Group>
                 </Col>
-                {/* <Col sm="6">
-                  <Form.Group>
-                    <Form.Label>Profit (RE)</Form.Label>
-                    <Form.Control
-                      size="sm"
-                      name="profit"
-                      type="number"
-                      value={(sellingCost - supplierCost).toFixed(3)}
-                      disabled
-                    />
-                  </Form.Group>
-                </Col> */}
                 <Col sm={{ offset: 6 }}>
                   <Form.Group>
                     <Form.Label>Stocked on</Form.Label>
                     <Form.Control
+                      autoComplete="off"
                       size="sm"
                       name="created_at"
                       type="date"
@@ -487,7 +482,6 @@ function ProductMaster() {
         data={filter.list}
         columns={columns}
         customStyles={customStyles}
-        defaultSortFieldId={1}
         dense
         responsive
         pagination
@@ -514,6 +508,6 @@ function ProductMaster() {
           </Button>
         </Modal.Footer>
       </Modal>
-    </>
+    </Container>
   );
 }
