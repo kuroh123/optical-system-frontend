@@ -4,7 +4,8 @@ import { AiOutlineClose } from "react-icons/ai";
 const FormModal = (props) => {
   return (
     <Modal
-      {...props}
+      // {...props}
+      show={props.show}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered

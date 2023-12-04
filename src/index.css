@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;900&display=swap");
 
 body {
   height: 100%;
@@ -25,6 +25,24 @@ input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 30px #d9d9d9 inset !important;
 }
+
+/* css to handle header & footer in multiple pages */
+/* @media print {
+  header,
+  footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+  }
+
+  header {
+    top: 0;
+  }
+
+  footer {
+    bottom: 0;
+  }
+} */
 
 @media screen {
   .hide-print {
@@ -53,7 +71,7 @@ input:-webkit-autofill:active {
 }
 
 .table-button {
-  background-color: #587acb;
+  background-color: #17a2b8;
   color: #fff; /* Text color */
   padding: 2px 6px; /* Adjust the padding to your preference */
   border: none;
@@ -72,4 +90,9 @@ input:-webkit-autofill:active {
 .modalCrossBtn {
   right: 15px;
   top: 15px;
+}
+
+.nav-link.active {
+  background-color: #022e3f;
+  border-radius: 6px;
 }

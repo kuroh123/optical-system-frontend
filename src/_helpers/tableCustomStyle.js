@@ -6,12 +6,12 @@ export const customStyles = {
   },
   headCells: {
     style: {
-      fontWeight: "bold",
+      fontWeight: 600,
       padding: "7px",
       border: "1px solid #eee",
       color: "#fff",
       borderBottom: "1px solid #999",
-      backgroundColor: "#587acb",
+      backgroundColor: "#17a2b8",
     },
   },
   cells: {

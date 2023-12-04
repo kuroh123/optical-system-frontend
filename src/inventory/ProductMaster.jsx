@@ -20,6 +20,7 @@ import DataTable from "react-data-table-component";
 import FormModal from "_components/FormModal";
 import moment from "moment";
 import { useSelector } from "react-redux";
+import { customStyles } from "_helpers/tableCustomStyle";
 
 export { ProductMaster };
 
@@ -111,13 +112,13 @@ function ProductMaster() {
       cell: (row, index) => (
         <div className="d-flex">
           <Button
-            className="ml-3 btn-warning fa fa-edit"
+            className=" btn-warning fa fa-edit"
             size="sm"
             onClick={(e) => handleEdit(e, row._id)}
             id={row._id}
           />
           <Button
-            className="ml-3 btn-danger fa fa-trash"
+            className="ms-3 btn-danger fa fa-trash"
             size="sm"
             onClick={() => {
               setProductId(row._id);
@@ -129,30 +130,6 @@ function ProductMaster() {
       ),
     },
   ];
-  const customStyles = {
-    rows: {
-      style: {
-        minHeight: "50px",
-      },
-    },
-    headCells: {
-      style: {
-        fontWeight: "bold",
-        padding: "7px",
-        border: "1px solid #eee",
-        color: "#fff",
-        borderBottom: "1px solid #999",
-        backgroundColor: "#587acb",
-      },
-    },
-    cells: {
-      style: {
-        borderLeft: "1px solid #eee",
-        borderRight: "1px solid #eee",
-        minHeight: "30px",
-      },
-    },
-  };
 
   const fetchProducts = async () => {
     const response = await fetchWrapper.get(
@@ -182,7 +159,7 @@ function ProductMaster() {
     const formData = new FormData(form.current);
     let object = {};
     formData.forEach((value, key) => (object[key] = value));
-    object.vat_applicable = vat;
+    // object.vat_applicable = vat;
     console.log(object);
     let response;
     if (productId) {
@@ -201,9 +178,8 @@ function ProductMaster() {
       console.log(response);
     }
     if (response) {
-      setModalShow(false);
-      fetchProducts();
       cleanupFn();
+      fetchProducts();
     }
   };
 
@@ -213,9 +189,9 @@ function ProductMaster() {
     const response = await fetchWrapper.get(`${baseUrl}/${id}`);
     if (response) {
       setValues(response);
-      setSupplierCost(response.supplier_cost);
-      setSellingCost(response.selling_price);
-      setVat(response.vat_applicable);
+      // setSupplierCost(response.supplier_cost);
+      // setSellingCost(response.selling_price);
+      // setVat(response.vat_applicable);
       setModalShow(true);
     }
   };
@@ -264,7 +240,11 @@ function ProductMaster() {
           </Row>
         </Form>
         <div>
-          <Button size="sm" onClick={() => setModalShow(true)}>
+          <Button
+            className="text-white"
+            size="sm"
+            onClick={() => setModalShow(true)}
+          >
             Add Product
           </Button>
         </div>

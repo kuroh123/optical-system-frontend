@@ -15,7 +15,7 @@ import {
 } from "react-bootstrap";
 import DataTable, { createTheme } from "react-data-table-component";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 import ModuleDatePicker from "_components/ModuleDatePicker";
 import { fetchWrapper } from "_helpers";
 import { BiMoneyWithdraw, BiReceipt } from "react-icons/bi";
@@ -31,10 +31,11 @@ import { customStyles } from "_helpers/tableCustomStyle";
 export { Customer };
 
 function Customer() {
+  const { customerId } = useParams();
   const form = useRef();
   const baseUrl = `${process.env.REACT_APP_API_URL}/patients`;
   const [fetchedPatients, setFetchedPatients] = useState([]);
-  const [patientId, setPatientId] = useState("");
+  const [currentCustomerId, setCurrentCustomerId] = useState("");
   const [values, setValues] = useState(null);
   const [modalShow, setModalShow] = useState(false);
   const [delShow, setDelShow] = useState(false);
@@ -99,6 +100,7 @@ function Customer() {
       name: "Customer Name",
       selector: (row) => `${row?.first_name} ${row?.last_name}`,
       sortable: true,
+      wrap: true,
     },
     {
       name: "Gender ",
@@ -118,7 +120,7 @@ function Customer() {
       selector: (row) => moment(row?.created_at).format("DD-MM-YYYY h:mm a"),
     },
     {
-      name: "Add",
+      name: "Eye Details",
       selector: null,
       width: "145px",
       cell: (row, index) => (
@@ -130,7 +132,7 @@ function Customer() {
             <div
               className="table-button ms-3"
               onClick={(e) => {
-                navigate(`/customer/eyeDetails/${row._id}`);
+                navigate(`/customer/customers/eyeDetails/${row._id}`);
               }}
             >
               <BsFillClipboard2PlusFill size={16}></BsFillClipboard2PlusFill>
@@ -138,57 +140,58 @@ function Customer() {
           </OverlayTrigger>
           <OverlayTrigger
             placement="top"
-            overlay={<Tooltip id="tooltip">Add Bill</Tooltip>}
-          >
-            <div className="table-button ms-3">
-              <BiMoneyWithdraw
-                size={16}
-                onClick={(e) => {
-                  navigate(`/customer/bill/${row._id}`);
-                }}
-              ></BiMoneyWithdraw>
-            </div>
-          </OverlayTrigger>
-        </div>
-      ),
-    },
-    {
-      name: "View",
-      selector: null,
-      width: "145px",
-      cell: (row, index) => (
-        <div className="d-flex">
-          <OverlayTrigger
-            placement="top"
             overlay={<Tooltip id="tooltip">View Eye Details</Tooltip>}
           >
             <div
               className="table-button ms-3"
               onClick={(e) => {
-                setPatientId(row._id);
+                setCurrentCustomerId(row._id);
                 setShow(true);
               }}
             >
               <BsFillEyeFill size={16} />
             </div>
           </OverlayTrigger>
-          <OverlayTrigger
-            placement="top"
-            overlay={<Tooltip id="tooltip">View Bill</Tooltip>}
-          >
-            <div
-              className="table-button ms-3"
-              onClick={(e) => {
-                setPatientId(row._id);
-                setShow(true);
-              }}
-            >
-              <BiReceipt size={16} />
-            </div>
-          </OverlayTrigger>
         </div>
       ),
     },
+    // {
+    //   name: "View",
+    //   selector: null,
+    //   width: "145px",
+    //   cell: (row, index) => (
+    //     <div className="d-flex">
+    //       <OverlayTrigger
+    //         placement="top"
+    //         overlay={<Tooltip id="tooltip">View Eye Details</Tooltip>}
+    //       >
+    //         <div
+    //           className="table-button ms-3"
+    //           onClick={(e) => {
+    //             setCurrentCustomerId(row._id);
+    //             setShow(true);
+    //           }}
+    //         >
+    //           <BsFillEyeFill size={16} />
+    //         </div>
+    //       </OverlayTrigger>
+    //       <OverlayTrigger
+    //         placement="top"
+    //         overlay={<Tooltip id="tooltip">View Bill</Tooltip>}
+    //       >
+    //         <div
+    //           className="table-button ms-3"
+    //           onClick={(e) => {
+    //             setCurrentCustomerId(row._id);
+    //             setShow(true);
+    //           }}
+    //         >
+    //           <BiReceipt size={16} />
+    //         </div>
+    //       </OverlayTrigger>
+    //     </div>
+    //   ),
+    // },
     {
       name: "Actions",
       selector: null,
@@ -204,7 +207,7 @@ function Customer() {
             className="ms-3 btn-danger fa fa-trash"
             size="sm"
             onClick={() => {
-              setPatientId(row._id);
+              setCurrentCustomerId(row._id);
               setDelShow(true);
             }}
             id={row._id}
@@ -220,18 +223,23 @@ function Customer() {
     let object = {};
     formData.forEach((value, key) => (object[key] = value));
     console.log(object);
+    const updatedObject = {
+      ...object,
+      first_name: object.first_name.toUpperCase(),
+      last_name: object.last_name.toUpperCase(),
+    };
     let response;
-    if (patientId) {
+    if (currentCustomerId) {
       response = await fetchWrapper.put(
-        baseUrl + "/" + patientId,
-        object,
+        baseUrl + "/" + currentCustomerId,
+        updatedObject,
         "Patient has been updated!"
       );
       console.log(response);
     } else {
       response = await fetchWrapper.post(
         baseUrl,
-        object,
+        updatedObject,
         "Patient has been created!"
       );
     }
@@ -244,7 +252,7 @@ function Customer() {
 
   const handleEdit = async (e, id) => {
     e.preventDefault();
-    setPatientId(id);
+    setCurrentCustomerId(id);
     const response = await fetchWrapper.get(`${baseUrl}/${id}`);
     if (response) {
       setValues(response);
@@ -255,8 +263,12 @@ function Customer() {
   const cleanupFn = () => {
     setModalShow(false);
     setValues(null);
-    setPatientId("");
+    setCurrentCustomerId("");
   };
+
+  if (customerId) {
+    return <Outlet />;
+  }
 
   return (
     <Container>
@@ -290,7 +302,12 @@ function Customer() {
           </Col>
         </Row>
         <div className="d-flex justify-content-end mb-3">
-          <Button size="sm" onClick={() => setModalShow(true)}>
+          <Button
+            className="text-light"
+            variant="primary"
+            size="sm"
+            onClick={() => setModalShow(true)}
+          >
             Add Customer
           </Button>
         </div>
@@ -425,7 +442,10 @@ function Customer() {
           </Alert>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={() => handleDelete(patientId)}>
+          <Button
+            variant="danger"
+            onClick={() => handleDelete(currentCustomerId)}
+          >
             Delete
           </Button>
           <Button variant="secondary" onClick={handleDelClose}>
@@ -433,7 +453,7 @@ function Customer() {
           </Button>
         </Modal.Footer>
       </Modal>
-      <ViewEyeDetails show={show} setShow={setShow} id={patientId} />
+      <ViewEyeDetails show={show} setShow={setShow} id={currentCustomerId} />
     </Container>
   );
 }

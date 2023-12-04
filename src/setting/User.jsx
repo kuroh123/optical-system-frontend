@@ -170,7 +170,11 @@ function User() {
   return (
     <Container>
       <div className="d-flex justify-content-end mb-3 mt-4">
-        <Button size="sm" onClick={() => setModalShow(true)}>
+        <Button
+          className="text-light"
+          size="sm"
+          onClick={() => setModalShow(true)}
+        >
           Add User
         </Button>
       </div>

@@ -25,7 +25,7 @@ function Dashboard() {
   console.log(dashboardData);
 
   return (
-    <Container className="my-3">
+    <div className="my-3">
       <Row>
         <Col sm="6">
           <Alert>
@@ -35,19 +35,19 @@ function Dashboard() {
         </Col>
       </Row>
       <Row>
-        <Col sm="3" className="card bg-info text-white">
+        <Col sm="3" className="card bg-primary text-white">
           <div className="card-body">
             <h5>Total Patients</h5>
             <h2 className="">{dashboardData?.patients}</h2>
           </div>
         </Col>
-        {/* <Col sm="3" className="card bg-info text-white mx-3">
+        {/* <Col sm="3" className="card bg-primary text-white mx-3">
           <div className="card-body">
             <h5>Total Eye Details</h5>
             <h2 className="">{dashboardData?.patientRequests}</h2>
           </div>
         </Col> */}
-        <Col sm="3" className="card bg-info text-white mx-3">
+        <Col sm="3" className="card bg-primary text-white mx-3">
           <div className="card-body">
             <h5>Total Bills</h5>
             <h2 className="">{dashboardData?.bill}</h2>
@@ -55,25 +55,25 @@ function Dashboard() {
         </Col>
       </Row>
       <Row className="my-3">
-        <Col sm="3" className="card bg-info text-white">
+        <Col sm="3" className="card bg-primary text-white">
           <div className="card-body">
             <h5>Total Revenue</h5>
             <h2 className="">{dashboardData?.total_revenue}</h2>
           </div>
         </Col>
-        <Col sm="3" className="card bg-info text-white mx-3">
+        <Col sm="3" className="card bg-primary text-white mx-3">
           <div className="card-body">
             <h5>Total VAT</h5>
-            <h2 className="">{dashboardData?.total_vat}</h2>
+            <h2 className="">{dashboardData?.total_vat?.toFixed(3)}</h2>
           </div>
         </Col>
-        <Col sm="3" className="card bg-info text-white">
+        <Col sm="3" className="card bg-primary text-white">
           <div className="card-body">
             <h5>Total Balance</h5>
             <h2 className="">{dashboardData?.total_balance}</h2>
           </div>
         </Col>
       </Row>
-    </Container>
+    </div>
   );
 }

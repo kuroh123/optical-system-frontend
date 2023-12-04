@@ -23,7 +23,7 @@ import "react-datepicker/dist/react-datepicker.css";
 export { PatientEyeDetails };
 
 function PatientEyeDetails() {
-  const { patientId } = useParams();
+  const { customerId } = useParams();
   const navigate = useNavigate();
   const [patientData, setPatientdata] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -62,17 +62,17 @@ function PatientEyeDetails() {
   };
 
   const fetchPatientData = async () => {
-    const response = await fetchWrapper.get(baseUrl + "/" + patientId);
+    const response = await fetchWrapper.get(baseUrl + "/" + customerId);
     if (response) {
       setPatientdata(response);
     }
   };
 
   useEffect(() => {
-    if (patientId) {
+    if (customerId) {
       fetchPatientData();
     }
-  }, [patientId]);
+  }, [customerId]);
 
   // useEffect(() => {
   //   fetchProducts();
@@ -82,7 +82,7 @@ function PatientEyeDetails() {
     e.preventDefault();
     // const formData = new FormData(form.current);
     let eyeData = eyeValues;
-    eyeData.patient = patientId;
+    eyeData.patient = customerId;
 
     // formData.forEach((value, key) => (object[key] = value));
     console.log(eyeData);
@@ -93,7 +93,7 @@ function PatientEyeDetails() {
     );
     if (eyeDetailsResponse) {
       setLoading(false);
-      navigate("/patient");
+      navigate("/customer/customers");
     }
   };
 
@@ -118,7 +118,9 @@ function PatientEyeDetails() {
                     autoComplete="off"
                     name="full_name"
                     type="text"
-                    value={`${patientData?.first_name} ${patientData?.last_name} / ${patientData?.gender}`}
+                    value={`${patientData?.first_name} ${
+                      patientData?.last_name
+                    } / ${patientData?.gender ? patientData.gender : ""}`}
                     disabled
                   />
                 </Form.Group>
