@@ -36,7 +36,7 @@ const PrintInvoice = React.forwardRef((props, ref) => {
                   SULTAN OPTICALS
                 </h1>
                 <span className="d-block">
-                  C.R.No: 160857, P.O Box: 1063, P.C: 133
+                  C.R.No: 1608576, P.O Box: 186, P.C: 133
                 </span>
                 <span className="d-block">Al Khuwair, Sultanate of Oman</span>
               </div>
