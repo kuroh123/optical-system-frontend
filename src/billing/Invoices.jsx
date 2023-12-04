@@ -1,6 +1,16 @@
 import moment from "moment";
 import { useEffect, useState, useRef } from "react";
-import { Button, Col, Form, Modal, Row, Spinner } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  Container,
+  Form,
+  Modal,
+  OverlayTrigger,
+  Row,
+  Spinner,
+  Tooltip,
+} from "react-bootstrap";
 import DataTable from "react-data-table-component";
 import { Link, Outlet, useParams } from "react-router-dom";
 import ReactSelect from "react-select";
@@ -9,25 +19,25 @@ import { fetchWrapper } from "_helpers";
 import { payment_status, status } from "_helpers/eye-details";
 import BillingForm from "./BillingForm";
 import ReactToPrint from "react-to-print";
-import PrintBill from "./PrintBill";
+import PrintInvoice from "./PrintInvoice";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import BillingFormv2 from "./BillingFormv2";
+import { customStyles } from "_helpers/tableCustomStyle";
+import TransactionModal from "./TransactionModal";
+import { AiOutlineClose } from "react-icons/ai";
 
-export { Billing };
+export { Invoices };
 
-const Billing = () => {
+const Invoices = () => {
   const { billingId } = useParams();
   const baseUrl = `${process.env.REACT_APP_API_URL}/billing`;
   const [billing, setBilling] = useState([]);
   const [printData, setPrintData] = useState(null);
   const [modalShow, setModalShow] = useState(false);
+  const [transactionModal, setTransactionModal] = useState(false);
   const [printModal, setPrintModal] = useState(false);
-  const [startDateTime, setStartDateTime] = useState(
-    moment().format("YYYY-MM-01T00:00:00Z")
-  );
-  const [endDateTime, setEndDateTime] = useState(
-    moment(new Date()).format("YYYY-MM-DDTHH:mm:ssZ")
-  );
+  const [currentInvoiceId, setCurrentInvoiceId] = useState("");
 
   const printBillRef = useRef(null);
   const test = useRef(null);
@@ -41,9 +51,7 @@ const Billing = () => {
   });
 
   const fetchBilling = async () => {
-    const response = await fetchWrapper.get(
-      `${baseUrl}?startDate=${startDateTime}&endDate=${endDateTime}`
-    );
+    const response = await fetchWrapper.get(`${baseUrl}`);
     if (response) {
       setBilling(response);
       setFilter({ list: response });
@@ -52,33 +60,8 @@ const Billing = () => {
 
   useEffect(() => {
     fetchBilling();
-  }, [startDateTime, endDateTime]);
+  }, []);
   console.log(billing);
-
-  const customStyles = {
-    rows: {
-      style: {
-        minHeight: "50px",
-      },
-    },
-    headCells: {
-      style: {
-        fontWeight: "bold",
-        padding: "7px",
-        border: "1px solid #eee",
-        color: "#fff",
-        borderBottom: "1px solid #999",
-        backgroundColor: "#587acb",
-      },
-    },
-    cells: {
-      style: {
-        borderLeft: "1px solid #eee",
-        borderRight: "1px solid #eee",
-        minHeight: "30px",
-      },
-    },
-  };
 
   const conditionalRowStyles = [
     {
@@ -127,6 +110,7 @@ const Billing = () => {
         .includes(e.target.value.toLowerCase());
     });
     setFilter({
+      ...filter,
       first_name: e.target.value,
       list: results,
     });
@@ -146,7 +130,7 @@ const Billing = () => {
   const filterMobile = (e) => {
     const results = billing.filter((item) => {
       if (e.target.value === "") return billing;
-      return item.patient.mobile.toString().includes(e.target.value);
+      return item.patient.mobile?.toString().includes(e.target.value);
     });
     setFilter({
       mobile: e.target.value,
@@ -155,22 +139,46 @@ const Billing = () => {
   };
 
   const filterPaymentStatus = (e) => {
+    console.log(e);
     const results = billing.filter((item) => {
-      if (e.value === "") return billing;
-      return item.payment_status.toString() === e.value;
+      if (!e || e.value === "") return billing;
+      return item.payment_status.toString() === e?.value;
     });
     setFilter({
-      payment_status: e.value,
+      payment_status: e?.value,
       list: results,
     });
   };
 
+  // TO BE FIXED
+
+  // const filterBilling = (e) => {
+  //   const { name } = e.target;
+  //   let results;
+  //   if (!e || e.target.value === "" || e.value === "") {
+  //     results = billing;
+  //   } else {
+  //     results = billing
+  //       .filter((item) =>
+  //         item.patient.first_name
+  //           .toLowerCase()
+  //           .includes(e.target.value.toLowerCase())
+  //       )
+  //       .filter((item) => item.bill_no.toString() === e.target.value);
+  //   }
+  //   setFilter({
+  //     ...filter,
+  //     [name]: e.target.value || e?.value,
+  //     list: results,
+  //   });
+  // };
+
   const columns = [
     {
-      name: "Bill No.",
+      name: "Invoice No.",
       selector: (row) => row.bill_no,
       sortable: true,
-      width: "85px",
+      width: "100px",
     },
     {
       name: "Payment Status",
@@ -195,41 +203,52 @@ const Billing = () => {
     // },
     {
       name: "Billed on",
-      selector: (row) => moment(row.created_at).format("DD-MM-YYYY hh:m a"),
+      selector: (row) => moment(row.created_at).format("DD-MM-YYYY hh:mm a"),
       width: "170px",
     },
     {
-      name: "Total Bill",
-      selector: (row) => row.total_amount,
+      name: "Grand Total",
+      selector: (row) => row.grand_total,
     },
     {
       name: "Paid Amount",
-      selector: (row) => row.paid_amount,
+      selector: (row) => row.paidAmount,
     },
     {
       name: "Balance",
-      selector: (row) => row.balance_amount,
+      selector: (row) => row.balanceAmount,
     },
     {
       name: "Actions",
       selector: null,
-      width: "160px",
+      width: "150px",
       cell: (row, index) => (
         <div className="d-flex align-items-center">
+          <OverlayTrigger
+            placement="top"
+            overlay={<Tooltip id="tooltip">Transactions</Tooltip>}
+          >
+            <Button
+              className="btn-primary fa fa-exchange"
+              size="sm"
+              onClick={() => {
+                setCurrentInvoiceId(row._id);
+                setTransactionModal(true);
+              }}
+            />
+          </OverlayTrigger>
+          <OverlayTrigger
+            placement="top"
+            overlay={<Tooltip id="tooltip">Print</Tooltip>}
+          >
+            <Button
+              className="mx-3 btn-primary fa fa-print"
+              size="sm"
+              onClick={() => handlePrintData(row._id)}
+            />
+          </OverlayTrigger>
           <Button
-            size="sm"
-            className={`btn-warning fa fa-edit`}
-            as={Link}
-            to={`/billing/${row._id}`}
-            id={row.id}
-          ></Button>
-          <Button
-            className="ml-3 btn-success fa fa-print"
-            size="sm"
-            onClick={() => handlePrintData(row._id)}
-          />
-          <Button
-            className="ml-3 btn-danger fa fa-trash"
+            className="btn-danger fa fa-trash"
             size="sm"
             onClick={() => handleDelete(row._id)}
             id={row._id}
@@ -243,25 +262,21 @@ const Billing = () => {
     },
   ];
 
+  console.log("[print]", printData);
+
   if (billingId) {
     return <Outlet />;
   }
   return (
-    <>
-      <div className="">
-        <ModuleDatePicker
-          startDateTime={startDateTime}
-          endDateTime={endDateTime}
-          setStartDateTime={setStartDateTime}
-          setEndDateTime={setEndDateTime}
-          fetchData={fetchBilling}
-        />
+    <Container>
+      <div>
         <Form>
           <Row className="mb-3 mt-4">
             <Col sm="2">
               <Form.Group>
-                <Form.Label>Search By Bill No</Form.Label>
+                <Form.Label>Search By Invoice No</Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   name="bill_no"
                   size="sm"
                   type="search"
@@ -274,6 +289,7 @@ const Billing = () => {
               <Form.Group>
                 <Form.Label>Search By Name</Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   name="first_name"
                   size="sm"
                   type="search"
@@ -286,6 +302,7 @@ const Billing = () => {
               <Form.Group>
                 <Form.Label>Search By Mobile</Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   name="mobile"
                   size="sm"
                   type="search"
@@ -294,22 +311,29 @@ const Billing = () => {
                 />
               </Form.Group>
             </Col>
-            <Col sm="2" className="ml-auto mb-1">
+            <Col sm="2" className="ms-auto mb-1">
               <div className="form-group">
-                <label>Payment Status</label>
-                <ReactSelect
-                  name="payment_status"
-                  options={status}
-                  setValue={filter.payment_status}
-                  onChange={filterPaymentStatus}
-                />
+                <div className="form-control-sm">
+                  <label>Payment Status</label>
+                  <ReactSelect
+                    name="payment_status"
+                    options={status}
+                    setValue={filter.payment_status}
+                    onChange={filterPaymentStatus}
+                    isClearable
+                  />
+                </div>
               </div>
             </Col>
           </Row>
         </Form>
         <div className="d-flex justify-content-end align-items-center mb-3 mt-4">
           <div>
-            <Button size="sm" onClick={() => setModalShow(true)}>
+            <Button
+              className="text-light"
+              size="sm"
+              onClick={() => setModalShow(true)}
+            >
               Add New Bill
             </Button>
           </div>
@@ -319,7 +343,6 @@ const Billing = () => {
           conditionalRowStyles={conditionalRowStyles}
           columns={columns}
           customStyles={customStyles}
-          defaultSortFieldId={1}
           dense
           responsive
           pagination
@@ -331,24 +354,38 @@ const Billing = () => {
           }
         />
       </div>
-      <BillingForm
+      <BillingFormv2
         modalShow={modalShow}
         setModalShow={setModalShow}
         fetchBilling={fetchBilling}
       />
+      <TransactionModal
+        show={transactionModal}
+        setShow={setTransactionModal}
+        id={currentInvoiceId}
+        fetchBilling={fetchBilling}
+      />
       <Modal
         show={printModal}
-        size="sm"
+        size="md"
         onHide={() => setPrintModal(false)}
         centered
       >
-        <Modal.Header>Print inovice</Modal.Header>
-        <Modal.Body>
+        <Modal.Header>
+          <div className="modalCrossBtn position-absolute cursor-pointer">
+            <AiOutlineClose size={20} onClick={() => setPrintModal(false)} />
+          </div>
+          <div style={{ fontWeight: 500 }}>
+            Print inovice for {printData?.patient.first_name}{" "}
+            {printData?.patient.last_name}
+          </div>
+        </Modal.Header>
+        <Modal.Body className="d-flex flex-column justify-content-center">
           <ReactToPrint
             trigger={() => {
               return (
-                <div className="d-flex justify-content-center">
-                  <Button className="btn-success" size="sm">
+                <div className="d-flex justify-content-center mt-3">
+                  <Button className="btn-success fa fa-print" size="sm">
                     Print Invoice
                   </Button>
                 </div>
@@ -357,21 +394,10 @@ const Billing = () => {
             content={() => printBillRef.current}
           />
           <div style={{ display: "none" }}>
-            <PrintBill ref={printBillRef} printData={printData} />
+            <PrintInvoice ref={printBillRef} printData={printData} />
           </div>
         </Modal.Body>
-        <Modal.Footer>
-          <div>
-            <Button
-              variant="danger"
-              size="sm"
-              onClick={() => setPrintModal(false)}
-            >
-              Close
-            </Button>
-          </div>
-        </Modal.Footer>
       </Modal>
-    </>
+    </Container>
   );
 };

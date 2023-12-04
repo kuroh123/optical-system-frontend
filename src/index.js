@@ -4,8 +4,9 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 
 import { store } from "./_store";
-import { App } from "./App";
+import { App } from "./App"; // always keep the sass file after css files
 import "./index.css";
+import "bootstrap/dist/js/bootstrap.bundle.min";
 import "font-awesome/css/font-awesome.min.css";
 
 // setup fake backend

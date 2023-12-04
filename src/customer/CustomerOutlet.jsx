@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 
-export { PatientOutlet };
+export { CustomerOutlet };
 
-function PatientOutlet() {
+function CustomerOutlet() {
   return <Outlet />;
 }

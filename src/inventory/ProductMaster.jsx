@@ -20,6 +20,7 @@ import DataTable from "react-data-table-component";
 import FormModal from "_components/FormModal";
 import moment from "moment";
 import { useSelector } from "react-redux";
+import { customStyles } from "_helpers/tableCustomStyle";
 
 export { ProductMaster };
 
@@ -52,7 +53,7 @@ function ProductMaster() {
   const columns = [
     {
       name: "S. no.",
-      selector: (row) => row?.product_no,
+      selector: (row, index) => index + 1,
       sortable: true,
       width: "65px",
     },
@@ -110,21 +111,14 @@ function ProductMaster() {
       selector: null,
       cell: (row, index) => (
         <div className="d-flex">
-          {/* <Button
-            className="btn-success fa fa-eye"
-            size="sm"
-            as={Link}
-            to={`/patient/${row._id}`}
-            id={row._id}
-          /> */}
           <Button
-            className="ml-3 btn-warning fa fa-edit"
+            className=" btn-warning fa fa-edit"
             size="sm"
             onClick={(e) => handleEdit(e, row._id)}
             id={row._id}
           />
           <Button
-            className="ml-3 btn-danger fa fa-trash"
+            className="ms-3 btn-danger fa fa-trash"
             size="sm"
             onClick={() => {
               setProductId(row._id);
@@ -136,30 +130,6 @@ function ProductMaster() {
       ),
     },
   ];
-  const customStyles = {
-    rows: {
-      style: {
-        minHeight: "50px",
-      },
-    },
-    headCells: {
-      style: {
-        fontWeight: "bold",
-        padding: "7px",
-        border: "1px solid #eee",
-        color: "#fff",
-        borderBottom: "1px solid #999",
-        backgroundColor: "#587acb",
-      },
-    },
-    cells: {
-      style: {
-        borderLeft: "1px solid #eee",
-        borderRight: "1px solid #eee",
-        minHeight: "30px",
-      },
-    },
-  };
 
   const fetchProducts = async () => {
     const response = await fetchWrapper.get(
@@ -189,7 +159,7 @@ function ProductMaster() {
     const formData = new FormData(form.current);
     let object = {};
     formData.forEach((value, key) => (object[key] = value));
-    object.vat_applicable = vat;
+    // object.vat_applicable = vat;
     console.log(object);
     let response;
     if (productId) {
@@ -208,7 +178,7 @@ function ProductMaster() {
       console.log(response);
     }
     if (response) {
-      setModalShow(false);
+      cleanupFn();
       fetchProducts();
     }
   };
@@ -219,9 +189,9 @@ function ProductMaster() {
     const response = await fetchWrapper.get(`${baseUrl}/${id}`);
     if (response) {
       setValues(response);
-      setSupplierCost(response.supplier_cost);
-      setSellingCost(response.selling_price);
-      setVat(response.vat_applicable);
+      // setSupplierCost(response.supplier_cost);
+      // setSellingCost(response.selling_price);
+      // setVat(response.vat_applicable);
       setModalShow(true);
     }
   };
@@ -250,13 +220,14 @@ function ProductMaster() {
   }, []);
 
   return (
-    <>
+    <Container>
       <div className="d-flex justify-content-between align-items-center mb-3 mt-4">
         <Form>
           <Row className="">
             <Col>
               <Form.Group>
                 <Form.Control
+                  autoComplete="off"
                   name="productName"
                   size="sm"
                   type="search"
@@ -269,7 +240,11 @@ function ProductMaster() {
           </Row>
         </Form>
         <div>
-          <Button size="sm" onClick={() => setModalShow(true)}>
+          <Button
+            className="text-white"
+            size="sm"
+            onClick={() => setModalShow(true)}
+          >
             Add Product
           </Button>
         </div>
@@ -282,6 +257,7 @@ function ProductMaster() {
               <Form.Group>
                 <Form.Label>Product Code</Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   size="sm"
                   name="product_code"
                   type="text"
@@ -294,6 +270,7 @@ function ProductMaster() {
               <Form.Group>
                 <Form.Label>Product Name</Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   required
                   size="sm"
                   name="product_name"
@@ -307,6 +284,7 @@ function ProductMaster() {
               <Form.Group>
                 <Form.Label>Category</Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   size="sm"
                   as="select"
                   name="product_category"
@@ -331,6 +309,7 @@ function ProductMaster() {
               <Form.Group>
                 <Form.Label>Brand</Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   size="sm"
                   name="brand"
                   type="text"
@@ -343,6 +322,7 @@ function ProductMaster() {
               <Form.Group>
                 <Form.Label>Description</Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   size="sm"
                   name="description"
                   as="textarea"
@@ -359,6 +339,7 @@ function ProductMaster() {
                   <Form.Group>
                     <Form.Label>Product For</Form.Label>
                     <Form.Control
+                      autoComplete="off"
                       size="sm"
                       as="select"
                       name="product_for"
@@ -379,6 +360,7 @@ function ProductMaster() {
                   <Form.Group>
                     <Form.Label>Ordered Qty.</Form.Label>
                     <Form.Control
+                      autoComplete="off"
                       size="sm"
                       name="ordered_quantity"
                       type="number"
@@ -392,6 +374,7 @@ function ProductMaster() {
                   <Form.Group>
                     <Form.Label>Current Qty.</Form.Label>
                     <Form.Control
+                      autoComplete="off"
                       size="sm"
                       name="current_quantity"
                       defaultValue={values?.current_quantity}
@@ -404,6 +387,7 @@ function ProductMaster() {
                   <Form.Group>
                     <Form.Label>Reorder Level</Form.Label>
                     <Form.Control
+                      autoComplete="off"
                       size="sm"
                       name="reorder_level"
                       type="number"
@@ -418,8 +402,9 @@ function ProductMaster() {
               <Row className="align-items-center">
                 <Col sm="6">
                   <Form.Group>
-                    <Form.Label>Purchase Cost</Form.Label>
+                    <Form.Label>Purchase Cost (per unit)</Form.Label>
                     <Form.Control
+                      autoComplete="off"
                       size="sm"
                       name="supplier_cost"
                       type="number"
@@ -432,8 +417,9 @@ function ProductMaster() {
                 </Col>
                 <Col sm="6">
                   <Form.Group>
-                    <Form.Label>Selling Price</Form.Label>
+                    <Form.Label>Selling Price (per unit)</Form.Label>
                     <Form.Control
+                      autoComplete="off"
                       size="sm"
                       name="selling_price"
                       type="number"
@@ -445,22 +431,11 @@ function ProductMaster() {
                     />
                   </Form.Group>
                 </Col>
-                {/* <Col sm="6">
-                  <Form.Group>
-                    <Form.Label>Profit (RE)</Form.Label>
-                    <Form.Control
-                      size="sm"
-                      name="profit"
-                      type="number"
-                      value={(sellingCost - supplierCost).toFixed(3)}
-                      disabled
-                    />
-                  </Form.Group>
-                </Col> */}
                 <Col sm={{ offset: 6 }}>
                   <Form.Group>
                     <Form.Label>Stocked on</Form.Label>
                     <Form.Control
+                      autoComplete="off"
                       size="sm"
                       name="created_at"
                       type="date"
@@ -487,7 +462,6 @@ function ProductMaster() {
         data={filter.list}
         columns={columns}
         customStyles={customStyles}
-        defaultSortFieldId={1}
         dense
         responsive
         pagination
@@ -514,6 +488,6 @@ function ProductMaster() {
           </Button>
         </Modal.Footer>
       </Modal>
-    </>
+    </Container>
   );
 }

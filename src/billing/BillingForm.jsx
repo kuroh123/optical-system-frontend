@@ -76,7 +76,7 @@ const BillingForm = ({ modalShow, setModalShow, fetchBilling }) => {
 
     setPatientData({
       ...patientData,
-      [name]: value,
+      [name]: value.toUpperCase(),
     });
   };
 
@@ -135,8 +135,10 @@ const BillingForm = ({ modalShow, setModalShow, fetchBilling }) => {
     setPatientData(patientInitialData);
   };
 
+  console.log(patientData.first_name);
+
   return (
-    <FormModal show={modalShow} onHide={cleanupFn} formTitle="New Billing">
+    <FormModal show={modalShow} onHide={cleanupFn} formTitle="New Bill">
       <Container>
         <Form onSubmit={handleSubmit}>
           <div className="h4">Patient Details</div>
@@ -145,11 +147,12 @@ const BillingForm = ({ modalShow, setModalShow, fetchBilling }) => {
               <Form.Group>
                 <Form.Label>First name</Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   required
                   size="sm"
                   name="first_name"
                   type="text"
-                  value={patientData.first_name.toUpperCase()}
+                  value={patientData.first_name}
                   onChange={handlePatientInputChange}
                   placeholder="Enter first name"
                 />
@@ -159,10 +162,11 @@ const BillingForm = ({ modalShow, setModalShow, fetchBilling }) => {
               <Form.Group>
                 <Form.Label>Last Name</Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   name="last_name"
                   type="text"
                   size="sm"
-                  value={patientData.last_name.toUpperCase()}
+                  value={patientData.last_name}
                   onChange={handlePatientInputChange}
                   placeholder="Enter last name"
                 />
@@ -172,6 +176,7 @@ const BillingForm = ({ modalShow, setModalShow, fetchBilling }) => {
               <Form.Group>
                 <Form.Label>Mobile Number</Form.Label>
                 <Form.Control
+                  autoComplete="off"
                   name="mobile"
                   type="number"
                   size="sm"
@@ -218,6 +223,7 @@ const BillingForm = ({ modalShow, setModalShow, fetchBilling }) => {
                 <Form.Group>
                   <Form.Label>Total Amount</Form.Label>
                   <Form.Control
+                    autoComplete="off"
                     name="total_amount"
                     size="sm"
                     type="text"
@@ -230,6 +236,7 @@ const BillingForm = ({ modalShow, setModalShow, fetchBilling }) => {
                 <Form.Group>
                   <Form.Label>Extra Charges</Form.Label>
                   <Form.Control
+                    autoComplete="off"
                     name="extra_charges"
                     size="sm"
                     type="text"
@@ -242,6 +249,7 @@ const BillingForm = ({ modalShow, setModalShow, fetchBilling }) => {
                 <Form.Group>
                   <Form.Label>Discount</Form.Label>
                   <Form.Control
+                    autoComplete="off"
                     name="discount"
                     size="sm"
                     type="number"
@@ -254,6 +262,7 @@ const BillingForm = ({ modalShow, setModalShow, fetchBilling }) => {
                 <Form.Group>
                   <Form.Label className="font-weight-bold">VAT</Form.Label>
                   <Form.Control
+                    autoComplete="off"
                     name="vat"
                     type="text"
                     size="sm"
@@ -272,6 +281,7 @@ const BillingForm = ({ modalShow, setModalShow, fetchBilling }) => {
                     Grand Total
                   </Form.Label>
                   <Form.Control
+                    autoComplete="off"
                     name="grand_total"
                     type="text"
                     size="sm"
@@ -285,6 +295,7 @@ const BillingForm = ({ modalShow, setModalShow, fetchBilling }) => {
                 <Form.Group>
                   <Form.Label>Payment Type</Form.Label>
                   <Form.Control
+                    autoComplete="off"
                     size="sm"
                     as="select"
                     name="payment_type"
@@ -306,6 +317,7 @@ const BillingForm = ({ modalShow, setModalShow, fetchBilling }) => {
                     Paid Amount
                   </Form.Label>
                   <Form.Control
+                    autoComplete="off"
                     name="paid_amount"
                     type="text"
                     size="sm"
@@ -320,6 +332,7 @@ const BillingForm = ({ modalShow, setModalShow, fetchBilling }) => {
                     Balance Amount
                   </Form.Label>
                   <Form.Control
+                    autoComplete="off"
                     name="balance_amount"
                     type="text"
                     size="sm"

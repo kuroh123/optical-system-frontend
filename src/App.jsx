@@ -1,30 +1,30 @@
+import "./App.scss";
 import {
   Routes,
   Route,
   Navigate,
   useNavigate,
   useLocation,
+  Outlet,
 } from "react-router-dom";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { history } from "_helpers";
-import { NavbarComponent, PrivateRoute } from "_components";
+import { PrivateRoute } from "_components";
 import { Login } from "login";
-import {
-  Patient,
-  PatientOutlet,
-  RegisterPatient,
-  EditPatient,
-  PatientPrescription,
-} from "patient";
-import { Billing } from "billing/Billing";
+import { Customer, PatientEyeDetails, CustomerOutlet } from "customer";
+import { Invoices } from "billing/Invoices";
 import { Dashboard } from "home/Dashboard";
-import { EditBilling } from "billing/EditBilling";
 import { ProductMaster } from "inventory/ProductMaster";
 import Setting from "setting/Setting";
 import { login_bg } from "assets";
+import PatientBill from "customer/PatientBill";
+import { User } from "setting/User";
+import NavbarComponent from "_components/Nav";
+import CustomerOrders from "customer/CustomerOrders";
+import TransactionModal from "billing/TransactionModal";
 // import { RegisterPatient } from "patient";
 
 export { App };
@@ -47,79 +47,85 @@ function App() {
             }
           />
           <Route
-            path="/register"
+            path="/customer"
             element={
               <PrivateRoute>
-                <RegisterPatient />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/patient"
-            element={
-              <PrivateRoute>
-                <PatientOutlet />
+                <CustomerOutlet />
               </PrivateRoute>
             }
           >
             <Route
-              index
+              path="customers"
               element={
                 <PrivateRoute>
-                  <Patient />
+                  <Customer />
                 </PrivateRoute>
               }
-            />
+            >
+              <Route
+                path="eyeDetails/:customerId"
+                element={
+                  <PrivateRoute>
+                    <PatientEyeDetails />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="bill/:customerId"
+                element={
+                  <PrivateRoute>
+                    <PatientBill />
+                  </PrivateRoute>
+                }
+              />
+            </Route>
             <Route
-              path=":patientId"
+              path="customerOrders"
               element={
                 <PrivateRoute>
-                  <PatientPrescription />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path=":patientId/edit"
-              element={
-                <PrivateRoute>
-                  <EditPatient />
+                  <CustomerOrders />
                 </PrivateRoute>
               }
             />
           </Route>
-          <Route
-            path="/billing"
-            element={
-              <PrivateRoute>
-                <Billing />
-              </PrivateRoute>
-            }
-          >
+          <Route path="/billing" element={<Outlet />}>
             <Route
-              path=":billingId"
+              path="invoices"
               element={
                 <PrivateRoute>
-                  <EditBilling />
+                  <Invoices />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="transactions"
+              element={
+                <PrivateRoute>
+                  <TransactionModal />
                 </PrivateRoute>
               }
             />
           </Route>
-          <Route
-            path="/products"
-            element={
-              <PrivateRoute>
-                <ProductMaster />
-              </PrivateRoute>
-            }
-          ></Route>
-          <Route
-            path="/setting"
-            element={
-              <PrivateRoute>
-                <Setting />
-              </PrivateRoute>
-            }
-          ></Route>
+          <Route path="/inventory" element={<Outlet />}>
+            <Route
+              path="products"
+              element={
+                <PrivateRoute>
+                  <ProductMaster />
+                </PrivateRoute>
+              }
+            />
+          </Route>
+          <Route path="/setting" element={<Outlet />}>
+            <Route
+              path="users"
+              element={
+                <PrivateRoute>
+                  <User />
+                </PrivateRoute>
+              }
+            />
+          </Route>
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
