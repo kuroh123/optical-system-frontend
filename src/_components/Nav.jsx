@@ -42,14 +42,12 @@ const NavbarComponent = () => {
             Dashboard
           </Nav.Link>
           <NavDropdown
-            active={param1 === "customer"}
+            active={param1 === "customers" || param1 === "customerOrders"}
             title="Customer"
             id="basic-nav-dropdown"
           >
-            <NavDropdown.Item href="/customer/customers">
-              Customers
-            </NavDropdown.Item>
-            <NavDropdown.Item href="/customer/customerOrders">
+            <NavDropdown.Item href="/customers">Customers</NavDropdown.Item>
+            <NavDropdown.Item href="/customerOrders">
               Customer Orders
             </NavDropdown.Item>
           </NavDropdown>
