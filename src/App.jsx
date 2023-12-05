@@ -50,7 +50,7 @@ function App() {
             path="/customer"
             element={
               <PrivateRoute>
-                <CustomerOutlet />
+                <Customer />
               </PrivateRoute>
             }
           >
@@ -88,7 +88,14 @@ function App() {
               }
             />
           </Route>
-          <Route path="/billing" element={<Outlet />}>
+          <Route
+            path="/billing"
+            element={
+              <PrivateRoute>
+                <Invoices />
+              </PrivateRoute>
+            }
+          >
             <Route
               path="invoices"
               element={
@@ -106,7 +113,14 @@ function App() {
               }
             />
           </Route>
-          <Route path="/inventory" element={<Outlet />}>
+          <Route
+            path="/inventory"
+            element={
+              <PrivateRoute>
+                <ProductMaster />
+              </PrivateRoute>
+            }
+          >
             <Route
               path="products"
               element={
@@ -116,7 +130,14 @@ function App() {
               }
             />
           </Route>
-          <Route path="/setting" element={<Outlet />}>
+          <Route
+            path="/setting"
+            element={
+              <PrivateRoute>
+                <User />
+              </PrivateRoute>
+            }
+          >
             <Route
               path="users"
               element={
