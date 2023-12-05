@@ -46,15 +46,6 @@ function App() {
               </PrivateRoute>
             }
           />
-          {/* <Route path="/customer">
-            <Route
-              index
-              element={
-                <PrivateRoute>
-                  <Customer />
-                </PrivateRoute>
-              }
-            /> */}
           <Route
             path="/customers"
             element={
@@ -71,14 +62,14 @@ function App() {
                 </PrivateRoute>
               }
             />
-            <Route
+            {/* <Route
               path="bill/:customerId"
               element={
                 <PrivateRoute>
                   <PatientBill />
                 </PrivateRoute>
               }
-            />
+            /> */}
           </Route>
           <Route
             path="/customerOrders"
@@ -88,69 +79,38 @@ function App() {
               </PrivateRoute>
             }
           />
-          {/* </Route> */}
-          <Route path="/billing">
-            <Route
-              index
-              element={
-                <PrivateRoute>
-                  <Invoices />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="invoices"
-              element={
-                <PrivateRoute>
-                  <Invoices />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="transactions"
+          <Route
+            path="/invoices"
+            element={
+              <PrivateRoute>
+                <Invoices />
+              </PrivateRoute>
+            }
+          />
+          {/* <Route
+              path="/transactions"
               element={
                 <PrivateRoute>
                   <TransactionModal />
                 </PrivateRoute>
               }
-            />
-          </Route>
-          <Route path="/inventory">
-            <Route
-              index
-              element={
-                <PrivateRoute>
-                  <ProductMaster />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="products"
-              element={
-                <PrivateRoute>
-                  <ProductMaster />
-                </PrivateRoute>
-              }
-            />
-          </Route>
-          <Route path="/setting">
-            <Route
-              index
-              element={
-                <PrivateRoute>
-                  <User />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="users"
-              element={
-                <PrivateRoute>
-                  <User />
-                </PrivateRoute>
-              }
-            />
-          </Route>
+            /> */}
+          <Route
+            path="/products"
+            element={
+              <PrivateRoute>
+                <ProductMaster />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="users"
+            element={
+              <PrivateRoute>
+                <User />
+              </PrivateRoute>
+            }
+          />
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

@@ -132,7 +132,7 @@ function Customer() {
             <div
               className="table-button ms-3"
               onClick={(e) => {
-                navigate(`/customer/customers/eyeDetails/${row._id}`);
+                navigate(`/customers/eyeDetails/${row._id}`);
               }}
             >
               <BsFillClipboard2PlusFill size={16}></BsFillClipboard2PlusFill>
