@@ -52,32 +52,28 @@ const NavbarComponent = () => {
             </NavDropdown.Item>
           </NavDropdown>
           <NavDropdown
-            active={param1 === "billing"}
+            active={param1 === "invoices"}
             title="Billing"
             id="basic-nav-dropdown"
           >
-            <NavDropdown.Item href="/billing/invoices">
-              Invoices
-            </NavDropdown.Item>
-            <NavDropdown.Item href="/billing/transactions">
+            <NavDropdown.Item href="/invoices">Invoices</NavDropdown.Item>
+            {/* <NavDropdown.Item href="/transactions">
               Transactions
-            </NavDropdown.Item>
+            </NavDropdown.Item> */}
           </NavDropdown>
           <NavDropdown
-            active={param1 === "inventory"}
+            active={param1 === "products"}
             title="Inventory"
             id="basic-nav-dropdown"
           >
-            <NavDropdown.Item href="/inventory/products">
-              Products
-            </NavDropdown.Item>
+            <NavDropdown.Item href="/products">Products</NavDropdown.Item>
           </NavDropdown>
           <NavDropdown
-            active={param1 === "setting"}
+            active={param1 === "users"}
             title="Setting"
             id="basic-nav-dropdown"
           >
-            <NavDropdown.Item href="/setting/users">Users</NavDropdown.Item>
+            <NavDropdown.Item href="/users">Users</NavDropdown.Item>
           </NavDropdown>
         </Nav>
         <Nav>

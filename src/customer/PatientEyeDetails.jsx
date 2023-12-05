@@ -93,7 +93,7 @@ function PatientEyeDetails() {
     );
     if (eyeDetailsResponse) {
       setLoading(false);
-      navigate("/customer/customers");
+      navigate("/customers");
     }
   };
 
