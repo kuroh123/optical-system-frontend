@@ -46,7 +46,7 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route path="/customer">
+          {/* <Route path="/customer">
             <Route
               index
               element={
@@ -54,41 +54,41 @@ function App() {
                   <Customer />
                 </PrivateRoute>
               }
-            />
+            /> */}
+          <Route
+            path="/customers"
+            element={
+              <PrivateRoute>
+                <Customer />
+              </PrivateRoute>
+            }
+          >
             <Route
-              path="customers"
+              path="eyeDetails/:customerId"
               element={
                 <PrivateRoute>
-                  <Customer />
+                  <PatientEyeDetails />
                 </PrivateRoute>
               }
-            >
-              <Route
-                path="eyeDetails/:customerId"
-                element={
-                  <PrivateRoute>
-                    <PatientEyeDetails />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="bill/:customerId"
-                element={
-                  <PrivateRoute>
-                    <PatientBill />
-                  </PrivateRoute>
-                }
-              />
-            </Route>
+            />
             <Route
-              path="customerOrders"
+              path="bill/:customerId"
               element={
                 <PrivateRoute>
-                  <CustomerOrders />
+                  <PatientBill />
                 </PrivateRoute>
               }
             />
           </Route>
+          <Route
+            path="/customerOrders"
+            element={
+              <PrivateRoute>
+                <CustomerOrders />
+              </PrivateRoute>
+            }
+          />
+          {/* </Route> */}
           <Route path="/billing">
             <Route
               index
