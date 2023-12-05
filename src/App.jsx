@@ -46,14 +46,15 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route
-            path="/customer"
-            element={
-              <PrivateRoute>
-                <Customer />
-              </PrivateRoute>
-            }
-          >
+          <Route path="/customer">
+            <Route
+              index
+              element={
+                <PrivateRoute>
+                  <Customer />
+                </PrivateRoute>
+              }
+            />
             <Route
               path="customers"
               element={
@@ -88,14 +89,15 @@ function App() {
               }
             />
           </Route>
-          <Route
-            path="/billing"
-            element={
-              <PrivateRoute>
-                <Invoices />
-              </PrivateRoute>
-            }
-          >
+          <Route path="/billing">
+            <Route
+              index
+              element={
+                <PrivateRoute>
+                  <Invoices />
+                </PrivateRoute>
+              }
+            />
             <Route
               path="invoices"
               element={
@@ -113,14 +115,15 @@ function App() {
               }
             />
           </Route>
-          <Route
-            path="/inventory"
-            element={
-              <PrivateRoute>
-                <ProductMaster />
-              </PrivateRoute>
-            }
-          >
+          <Route path="/inventory">
+            <Route
+              index
+              element={
+                <PrivateRoute>
+                  <ProductMaster />
+                </PrivateRoute>
+              }
+            />
             <Route
               path="products"
               element={
@@ -130,14 +133,15 @@ function App() {
               }
             />
           </Route>
-          <Route
-            path="/setting"
-            element={
-              <PrivateRoute>
-                <User />
-              </PrivateRoute>
-            }
-          >
+          <Route path="/setting">
+            <Route
+              index
+              element={
+                <PrivateRoute>
+                  <User />
+                </PrivateRoute>
+              }
+            />
             <Route
               path="users"
               element={
