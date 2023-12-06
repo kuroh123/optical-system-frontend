@@ -1,6 +1,7 @@
 import moment from "moment";
 import { useEffect, useState, useRef } from "react";
 import {
+  Accordion,
   Button,
   Col,
   Container,
@@ -17,7 +18,6 @@ import ReactSelect from "react-select";
 import ModuleDatePicker from "_components/ModuleDatePicker";
 import { fetchWrapper } from "_helpers";
 import { payment_status, status } from "_helpers/eye-details";
-import BillingForm from "./BillingForm";
 import ReactToPrint from "react-to-print";
 import PrintInvoice from "./PrintInvoice";
 import { toast } from "react-toastify";
@@ -26,6 +26,8 @@ import BillingFormv2 from "./BillingFormv2";
 import { customStyles } from "_helpers/tableCustomStyle";
 import TransactionModal from "./TransactionModal";
 import { AiOutlineClose } from "react-icons/ai";
+import { useSelector } from "react-redux";
+import PrintInvoiceA5 from "./PrintInovoiceA5";
 
 export { Invoices };
 
@@ -38,6 +40,7 @@ const Invoices = () => {
   const [transactionModal, setTransactionModal] = useState(false);
   const [printModal, setPrintModal] = useState(false);
   const [currentInvoiceId, setCurrentInvoiceId] = useState("");
+  const user = useSelector((x) => x.auth.user.user);
 
   const printBillRef = useRef(null);
   const test = useRef(null);
@@ -51,7 +54,9 @@ const Invoices = () => {
   });
 
   const fetchBilling = async () => {
-    const response = await fetchWrapper.get(`${baseUrl}`);
+    const response = await fetchWrapper.get(
+      `${baseUrl}/${user.location ? `?location=${user.location?._id}` : ""}`
+    );
     if (response) {
       setBilling(response);
       setFilter({ list: response });
@@ -269,91 +274,95 @@ const Invoices = () => {
   }
   return (
     <Container>
-      <div>
-        <Form>
-          <Row className="mb-3 mt-4">
-            <Col sm="2">
-              <Form.Group>
-                <Form.Label>Search By Invoice No</Form.Label>
-                <Form.Control
-                  autoComplete="off"
-                  name="bill_no"
-                  size="sm"
-                  type="search"
-                  value={filter.visit_id}
-                  onChange={filterBillNo}
-                />
-              </Form.Group>
-            </Col>
-            <Col sm="2">
-              <Form.Group>
-                <Form.Label>Search By Name</Form.Label>
-                <Form.Control
-                  autoComplete="off"
-                  name="first_name"
-                  size="sm"
-                  type="search"
-                  value={filter.first_name}
-                  onChange={filterFirstName}
-                />
-              </Form.Group>
-            </Col>
-            <Col sm="2">
-              <Form.Group>
-                <Form.Label>Search By Mobile</Form.Label>
-                <Form.Control
-                  autoComplete="off"
-                  name="mobile"
-                  size="sm"
-                  type="search"
-                  value={filter.mobile}
-                  onChange={filterMobile}
-                />
-              </Form.Group>
-            </Col>
-            <Col sm="2" className="ms-auto mb-1">
-              <div className="form-group">
-                <div className="form-control-sm">
-                  <label>Payment Status</label>
-                  <ReactSelect
-                    name="payment_status"
-                    options={status}
-                    setValue={filter.payment_status}
-                    onChange={filterPaymentStatus}
-                    isClearable
+      <Accordion className="my-3">
+        <Accordion.Item eventKey="0">
+          <Accordion.Header>Filters</Accordion.Header>
+          <Accordion.Body>
+            <Row>
+              <Col sm="2">
+                <Form.Group>
+                  <Form.Control
+                    autoComplete="off"
+                    name="bill_no"
+                    size="sm"
+                    type="search"
+                    value={filter.visit_id}
+                    onChange={filterBillNo}
+                    placeholder="Search by inovice no."
                   />
+                </Form.Group>
+              </Col>
+              <Col sm="2">
+                <Form.Group>
+                  <Form.Control
+                    autoComplete="off"
+                    name="first_name"
+                    size="sm"
+                    type="search"
+                    value={filter.first_name}
+                    onChange={filterFirstName}
+                    placeholder="Search by name"
+                  />
+                </Form.Group>
+              </Col>
+              <Col sm="2">
+                <Form.Group>
+                  <Form.Control
+                    autoComplete="off"
+                    name="mobile"
+                    size="sm"
+                    type="search"
+                    value={filter.mobile}
+                    onChange={filterMobile}
+                    placeholder="Search by mobile"
+                  />
+                </Form.Group>
+              </Col>
+              <Col sm="2" className="ms-auto mb-1">
+                <div className="form-group">
+                  <div className="form-control-sm">
+                    <ReactSelect
+                      name="payment_status"
+                      options={status}
+                      setValue={filter.payment_status}
+                      onChange={filterPaymentStatus}
+                      placeholder="Search status"
+                      isClearable
+                    />
+                  </div>
                 </div>
-              </div>
-            </Col>
-          </Row>
-        </Form>
-        <div className="d-flex justify-content-end align-items-center mb-3 mt-4">
-          <div>
-            <Button
-              className="text-light"
-              size="sm"
-              onClick={() => setModalShow(true)}
-            >
-              Add New Bill
-            </Button>
-          </div>
+              </Col>
+            </Row>
+          </Accordion.Body>
+        </Accordion.Item>
+      </Accordion>
+      <div className="d-flex justify-content-end align-items-center mb-3 mt-4">
+        <div>
+          <Button
+            className="text-light"
+            size="sm"
+            onClick={() => setModalShow(true)}
+          >
+            Add New Bill
+          </Button>
         </div>
-        <DataTable
-          data={filter.list}
-          conditionalRowStyles={conditionalRowStyles}
-          columns={columns}
-          customStyles={customStyles}
-          dense
-          responsive
-          pagination
-          paginationRowsPerPageOptions={[10, 25, 50, 100]}
-          progressComponent={
-            <div className="py-5">
-              <Spinner className="my-5" animation="border" variant="primary" />
-            </div>
-          }
-        />
       </div>
+      <DataTable
+        data={filter.list}
+        conditionalRowStyles={conditionalRowStyles}
+        columns={columns}
+        customStyles={customStyles}
+        dense
+        responsive
+        pagination
+        paginationRowsPerPageOptions={[10, 25, 50, 100]}
+        progressComponent={
+          <div className="py-5">
+            <Spinner className="my-5" animation="border" variant="primary" />
+          </div>
+        }
+      />
+
       <BillingFormv2
         modalShow={modalShow}
         setModalShow={setModalShow}
@@ -394,7 +403,7 @@ const Invoices = () => {
             content={() => printBillRef.current}
           />
           <div style={{ display: "none" }}>
-            <PrintInvoice ref={printBillRef} printData={printData} />
+            <PrintInvoiceA5 ref={printBillRef} printData={printData} />
           </div>
         </Modal.Body>
       </Modal>

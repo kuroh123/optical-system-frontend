@@ -171,11 +171,10 @@ const CustomerOrders = () => {
         <Row className="mb-3 mt-4">
           <Col sm="3">
             <Form.Group>
-              <Form.Label>Search Description</Form.Label>
               <Form.Control
                 autoComplete="off"
                 name="description"
-                placeholder="Enter Description"
+                placeholder="Search by description"
                 size="sm"
                 type="search"
                 value={filter.description}
@@ -186,13 +185,13 @@ const CustomerOrders = () => {
           <Col sm="2" className="ms-auto mb-1">
             <div className="form-group">
               <div className="form-control-sm">
-                <label>Status</label>
                 <ReactSelect
                   name="status"
                   options={status}
                   setValue={filter.status}
                   onChange={filterStatus}
                   isClearable
+                  placeholder="Search status"
                 />
               </div>
             </div>

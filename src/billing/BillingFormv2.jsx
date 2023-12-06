@@ -82,7 +82,9 @@ const BillingFormv2 = ({ modalShow, setModalShow, fetchBilling }) => {
   const [billedItems, setBilledItems] = useState([]);
 
   const fetchProducts = async (inputValue) => {
-    const response = await fetchWrapper.get(productBaseUrl);
+    const response = await fetchWrapper.get(
+      productBaseUrl + (user.location ? `?location=${user.location?._id}` : "")
+    );
     return response;
   };
 
@@ -93,9 +95,11 @@ const BillingFormv2 = ({ modalShow, setModalShow, fetchBilling }) => {
 
   const loadOptions = async (inputValue) => {
     return fetchProducts(inputValue).then((res) => {
-      return res.filter((i) =>
-        i.product_name.toLowerCase().includes(inputValue.toLowerCase())
-      );
+      return res
+        .filter((i) => !(i.current_quantity <= 0))
+        .filter((i) =>
+          i.product_name.toLowerCase().includes(inputValue.toLowerCase())
+        );
     });
   };
 
@@ -123,16 +127,20 @@ const BillingFormv2 = ({ modalShow, setModalShow, fetchBilling }) => {
   const handleProductAdd = () => {
     const sold_quantity = document.getElementById("sold_quantity").value;
     const vat_applicable = document.getElementById("vat_applicable").checked;
-    const updatedAddedItem = {
-      description: selectedProduct?.product_name,
-      product: selectedProduct?._id,
-      type: "PRODUCT",
-      amount: selectedProduct?.selling_price,
-      sold_quantity: sold_quantity,
-      vat_applicable: vat_applicable,
-    };
-    setBilledItems((prevList) => [...prevList, updatedAddedItem]);
-    setSelectedProduct(null);
+    if (sold_quantity > selectedProduct?.current_quantity) {
+      toast.error("Selling qty cannot be more than stock quantity!");
+    } else {
+      const updatedAddedItem = {
+        description: selectedProduct?.product_name,
+        product: selectedProduct?._id,
+        type: "PRODUCT",
+        amount: selectedProduct?.selling_price,
+        sold_quantity: sold_quantity,
+        vat_applicable: vat_applicable,
+      };
+      setBilledItems((prevList) => [...prevList, updatedAddedItem]);
+      setSelectedProduct(null);
+    }
   };
 
   const handleCustomerOrderAdd = () => {

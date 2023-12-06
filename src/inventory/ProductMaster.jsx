@@ -402,7 +402,7 @@ function ProductMaster() {
               <Row className="align-items-center">
                 <Col sm="6">
                   <Form.Group>
-                    <Form.Label>Purchase Cost (per unit)</Form.Label>
+                    <Form.Label>Purchase Cost / unit</Form.Label>
                     <Form.Control
                       autoComplete="off"
                       size="sm"
@@ -417,7 +417,7 @@ function ProductMaster() {
                 </Col>
                 <Col sm="6">
                   <Form.Group>
-                    <Form.Label>Selling Price (per unit)</Form.Label>
+                    <Form.Label>Selling Price / unit</Form.Label>
                     <Form.Control
                       autoComplete="off"
                       size="sm"

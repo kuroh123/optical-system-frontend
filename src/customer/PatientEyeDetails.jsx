@@ -19,6 +19,7 @@ import {
 } from "_helpers/eye-details";
 import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
+import { toast } from "react-toastify";
 
 export { PatientEyeDetails };
 
@@ -74,26 +75,25 @@ function PatientEyeDetails() {
     }
   }, [customerId]);
 
-  // useEffect(() => {
-  //   fetchProducts();
-  // }, []);
+  console.log(eyeValues);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // const formData = new FormData(form.current);
-    let eyeData = eyeValues;
-    eyeData.patient = customerId;
-
-    // formData.forEach((value, key) => (object[key] = value));
-    console.log(eyeData);
-    const eyeDetailsResponse = await fetchWrapper.post(
-      eyeDetailsRequestBaseUrl,
-      eyeData,
-      "Eye Details has been created!"
-    );
-    if (eyeDetailsResponse) {
-      setLoading(false);
-      navigate("/customers");
+    const eyeData = eyeValues;
+    if (Object.values(eyeData).every((value) => !value)) {
+      toast.error("Eye details cannot be empty!");
+    } else {
+      eyeData.patient = customerId;
+      const eyeDetailsResponse = await fetchWrapper.post(
+        eyeDetailsRequestBaseUrl,
+        eyeData,
+        "Eye Details has been created!"
+      );
+      if (eyeDetailsResponse) {
+        setLoading(false);
+        setEyeValues(eyeInitialValues);
+        navigate("/customers");
+      }
     }
   };
 

@@ -2,6 +2,7 @@ import moment from "moment";
 import { ViewEyeDetails } from "customer/ViewEyeDetails";
 import { useEffect, useRef, useState } from "react";
 import {
+  Accordion,
   Alert,
   Button,
   Col,
@@ -272,46 +273,52 @@ function Customer() {
 
   return (
     <Container>
-      <Form>
-        <Row className="mb-3 mt-4">
-          <Col sm="3">
-            <Form.Group>
-              <Form.Label>Search By Name</Form.Label>
-              <Form.Control
-                autoComplete="off"
-                name="first_name"
-                size="sm"
-                type="search"
-                value={filter.first_name}
-                onChange={filterFirstName}
-              />
-            </Form.Group>
-          </Col>
-          <Col sm="3">
-            <Form.Group>
-              <Form.Label>Search By Mobile</Form.Label>
-              <Form.Control
-                autoComplete="off"
-                name="mobile"
-                size="sm"
-                type="search"
-                value={filter.mobile}
-                onChange={filterMobile}
-              />
-            </Form.Group>
-          </Col>
-        </Row>
-        <div className="d-flex justify-content-end mb-3">
-          <Button
-            className="text-light"
-            variant="primary"
-            size="sm"
-            onClick={() => setModalShow(true)}
-          >
-            Add Customer
-          </Button>
-        </div>
-      </Form>
+      <Accordion className="my-3">
+        <Accordion.Item eventKey="0">
+          <Accordion.Header>Filters</Accordion.Header>
+          <Accordion.Body>
+            <Row className="">
+              <Col sm="3">
+                <Form.Group>
+                  <Form.Control
+                    autoComplete="off"
+                    name="first_name"
+                    size="sm"
+                    type="search"
+                    value={filter.first_name}
+                    onChange={filterFirstName}
+                    placeholder="Search by name"
+                  />
+                </Form.Group>
+              </Col>
+              <Col sm="3">
+                <Form.Group>
+                  <Form.Control
+                    autoComplete="off"
+                    name="mobile"
+                    size="sm"
+                    type="search"
+                    value={filter.mobile}
+                    onChange={filterMobile}
+                    placeholder="Search by mobile"
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+          </Accordion.Body>
+        </Accordion.Item>
+      </Accordion>
+      <div className="d-flex justify-content-end mb-3">
+        <Button
+          className="text-light"
+          variant="primary"
+          size="sm"
+          onClick={() => setModalShow(true)}
+        >
+          Add Customer
+        </Button>
+      </div>
+
       <FormModal
         show={modalShow}
         onHide={cleanupFn}
