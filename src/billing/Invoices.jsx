@@ -40,6 +40,7 @@ const Invoices = () => {
   const [transactionModal, setTransactionModal] = useState(false);
   const [printModal, setPrintModal] = useState(false);
   const [currentInvoiceId, setCurrentInvoiceId] = useState("");
+  const [pending, setPending] = useState(false)
   const user = useSelector((x) => x.auth.user.user);
 
   const printBillRef = useRef(null);
@@ -54,10 +55,12 @@ const Invoices = () => {
   });
 
   const fetchBilling = async () => {
+    setPending(true)
     const response = await fetchWrapper.get(
       `${baseUrl}/${user.location ? `?location=${user.location?._id}` : ""}`
     );
     if (response) {
+      setPending(false)
       setBilling(response);
       setFilter({ list: response });
     }
@@ -185,6 +188,12 @@ const Invoices = () => {
       sortable: true,
       width: "100px",
     },
+    // {
+    //   name: "File No. (old)",
+    //   selector: (row) => row.file_no,
+    //   sortable: true,
+    //   width: "100px",
+    // },
     {
       name: "Payment Status",
       selector: (row) => row.payment_status,
@@ -193,7 +202,7 @@ const Invoices = () => {
     },
     {
       name: "Patient Name",
-      selector: (row) => `${row.patient?.first_name} ${row.patient?.last_name}`,
+      selector: (row) => `${row.patient?.first_name} ${row.patient?.last_name ? row.patient?.last_name : ""}`,
       sortable: true,
       width: "160px",
     },
@@ -353,9 +362,11 @@ const Invoices = () => {
         columns={columns}
         customStyles={customStyles}
         dense
+        persistTableHead
         responsive
         pagination
         paginationRowsPerPageOptions={[10, 25, 50, 100]}
+        progressPending={pending}
         progressComponent={
           <div className="py-5">
             <Spinner className="my-5" animation="border" variant="primary" />

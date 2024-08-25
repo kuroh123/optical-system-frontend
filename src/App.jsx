@@ -8,7 +8,7 @@ import {
   Outlet,
 } from "react-router-dom";
 
-import { ToastContainer, toast } from "react-toastify";
+import { Flip, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { history } from "_helpers";
@@ -113,7 +113,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
-        <ToastContainer />
+        <ToastContainer transition={Flip}/>
       </div>
     </div>
   );

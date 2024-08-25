@@ -43,6 +43,7 @@ function Customer() {
   const [show, setShow] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [pending, setPending] = useState(false)
   const navigate = useNavigate();
   const [filter, setFilter] = useState({
     first_name: "",
@@ -51,9 +52,11 @@ function Customer() {
   });
 
   const fetchPatient = async () => {
+    setPending(true)
     const response = await fetchWrapper.get(`${baseUrl}`);
     if (response) {
-      setFetchedPatients(response);
+      setPending(false)
+      setFetchedPatients(response); 
       setFilter({ list: response });
     }
   };
@@ -99,7 +102,7 @@ function Customer() {
   const columns = [
     {
       name: "Customer Name",
-      selector: (row) => `${row?.first_name} ${row?.last_name}`,
+      selector: (row) => `${row?.first_name} ${row?.last_name ? row?.last_name : "" }`,
       sortable: true,
       wrap: true,
     },
@@ -119,6 +122,7 @@ function Customer() {
     {
       name: "Registered On",
       selector: (row) => moment(row?.created_at).format("DD-MM-YYYY h:mm a"),
+      sortable: true
     },
     {
       name: "Eye Details",
@@ -435,6 +439,8 @@ function Customer() {
         responsive
         pagination
         paginationRowsPerPageOptions={[10, 25, 50, 100]}
+        persistTableHead
+        progressPending={pending}
         progressComponent={
           <div className="py-5">
             <Spinner className="my-5" animation="border" variant="primary" />

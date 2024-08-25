@@ -23,6 +23,7 @@ const CustomerOrders = () => {
   const [currentCustomerOrder, setCurrentCustomerOrder] = useState(null);
   // const [values, setValues] = useState(null);
   const [modalShow, setModalShow] = useState(false);
+  const [pending, setPending] = useState(false)
   const editForm = useRef();
 
   const [filter, setFilter] = useState({
@@ -36,8 +37,10 @@ const CustomerOrders = () => {
   ];
 
   const fetchCustomerOrders = async () => {
+    setPending(true)
     const response = await fetchWrapper.get(baseUrl);
     if (response) {
+      setPending(false)
       setCustomerOrders(response);
       setFilter({ list: response });
     }
@@ -295,6 +298,8 @@ const CustomerOrders = () => {
         responsive
         pagination
         paginationRowsPerPageOptions={[10, 25, 50, 100]}
+        persistTableHead
+        progressPending={pending}
         progressComponent={
           <div className="py-5">
             <Spinner className="my-5" animation="border" variant="primary" />

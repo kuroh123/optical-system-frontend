@@ -37,6 +37,7 @@ function ProductMaster() {
   const [supplierCost, setSupplierCost] = useState(0);
   const [sellingCost, setSellingCost] = useState(0);
   const [vat, setVat] = useState(false);
+  const [pending, setPending] = useState(false)
   const today = new Date();
   // const [startDateTime, setStartDateTime] = useState(
   //   moment(today).format("YYYY-MM-DDT00:00:00Z")
@@ -51,12 +52,12 @@ function ProductMaster() {
   });
 
   const columns = [
-    {
-      name: "S. no.",
-      selector: (row, index) => index + 1,
-      sortable: true,
-      width: "65px",
-    },
+    // {
+    //   name: "S. no.",
+    //   selector: (row, index) => index + 1,
+    //   sortable: true,
+    //   width: "65px",
+    // },
     {
       name: "Code ",
       selector: (row) => row?.product_code,
@@ -132,10 +133,12 @@ function ProductMaster() {
   ];
 
   const fetchProducts = async () => {
+    setPending(true)
     const response = await fetchWrapper.get(
       baseUrl + (user.location ? `?location=${user.location?._id}` : "")
     );
     if (response) {
+      setPending(false)
       setProducts(response);
       setFilter({ list: response });
     }
@@ -466,6 +469,8 @@ function ProductMaster() {
         responsive
         pagination
         paginationRowsPerPageOptions={[10, 25, 50, 100]}
+        persistTableHead
+        progressPending={pending}
         progressComponent={
           <div className="py-5">
             <Spinner className="my-5" animation="border" variant="primary" />

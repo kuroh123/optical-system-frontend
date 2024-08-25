@@ -73,21 +73,21 @@ function ViewEyeDetails({ show, setShow, id }) {
                     <tbody>
                       <tr>
                         <td className="font-weight-bold">R</td>
-                        <td>{data?.right_eye.spherical}</td>
-                        <td>{data?.right_eye.cylindrical}</td>
-                        <td>{data?.right_eye.axis}</td>
-                        <td>{data?.right_eye.add}</td>
-                        <td>{data?.right_eye.prism}</td>
-                        <td>{data?.right_eye.va}</td>
+                        <td>{data?.right_eye?.spherical}</td>
+                        <td>{data?.right_eye?.cylindrical}</td>
+                        <td>{data?.right_eye?.axis}</td>
+                        <td>{data?.right_eye?.add}</td>
+                        <td>{data?.right_eye?.prism}</td>
+                        <td>{data?.right_eye?.va}</td>
                       </tr>
                       <tr>
                         <td className="font-weight-bold">L</td>
-                        <td>{data?.left_eye.spherical}</td>
-                        <td>{data?.left_eye.cylindrical}</td>
-                        <td>{data?.left_eye.axis}</td>
-                        <td>{data?.left_eye.add}</td>
-                        <td>{data?.left_eye.prism}</td>
-                        <td>{data?.left_eye.va}</td>
+                        <td>{data?.left_eye?.spherical}</td>
+                        <td>{data?.left_eye?.cylindrical}</td>
+                        <td>{data?.left_eye?.axis}</td>
+                        <td>{data?.left_eye?.add}</td>
+                        <td>{data?.left_eye?.prism}</td>
+                        <td>{data?.left_eye?.va}</td>
                       </tr>
                     </tbody>
                   </Table>

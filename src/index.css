@@ -90,6 +90,7 @@ input:-webkit-autofill:active {
 .modalCrossBtn {
   right: 15px;
   top: 15px;
+  cursor: pointer;
 }
 
 .nav-link.active {

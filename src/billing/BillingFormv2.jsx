@@ -96,9 +96,9 @@ const BillingFormv2 = ({ modalShow, setModalShow, fetchBilling }) => {
   const loadOptions = async (inputValue) => {
     return fetchProducts(inputValue).then((res) => {
       return res
-        .filter((i) => !(i.current_quantity <= 0))
+        // .filter((i) => !(i.current_quantity <= 0))
         .filter((i) =>
-          i.product_name.toLowerCase().includes(inputValue.toLowerCase())
+          i.product_code?.toLowerCase().includes(inputValue.toLowerCase())
         );
     });
   };
@@ -110,7 +110,7 @@ const BillingFormv2 = ({ modalShow, setModalShow, fetchBilling }) => {
   const loadPatientOptions = async (inputValue) => {
     return fetchPatients(inputValue).then((res) => {
       return res.filter((i) =>
-        i.mobile.toString().toLowerCase().includes(inputValue.toLowerCase())
+        i.mobile?.toString().toLowerCase().includes(inputValue.toLowerCase())
       );
     });
   };
@@ -131,6 +131,7 @@ const BillingFormv2 = ({ modalShow, setModalShow, fetchBilling }) => {
       toast.error("Selling qty cannot be more than stock quantity!");
     } else {
       const updatedAddedItem = {
+        product_code: selectedProduct?.product_code,
         description: selectedProduct?.product_name,
         product: selectedProduct?._id,
         type: "PRODUCT",
@@ -249,6 +250,11 @@ const BillingFormv2 = ({ modalShow, setModalShow, fetchBilling }) => {
 
   const columns = [
     {
+      name: "Code",
+      selector: (row) => row.product_code,
+      wrap: true,
+    },
+    {
       name: "Description",
       selector: (row) => row.description,
       wrap: true,
@@ -317,7 +323,7 @@ const BillingFormv2 = ({ modalShow, setModalShow, fetchBilling }) => {
                     onChange={handlePatientSelect}
                     loadOptions={loadPatientOptions}
                     getOptionLabel={(e) =>
-                      e.first_name + " " + e.last_name + " | " + e.mobile
+                      e.first_name 
                     }
                     getOptionValue={(e) => e._id}
                     isClearable
