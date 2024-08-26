@@ -25,7 +25,6 @@ function ViewEyeDetails({ show, setShow, id }) {
     }
   }, [id]);
 
-  console.log(eyeDetailData);
   const handleClose = () => {
     setShow(false);
   };

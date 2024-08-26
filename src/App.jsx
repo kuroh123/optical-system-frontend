@@ -5,7 +5,6 @@ import {
   Navigate,
   useNavigate,
   useLocation,
-  Outlet,
 } from "react-router-dom";
 
 import { Flip, ToastContainer } from "react-toastify";
@@ -18,13 +17,9 @@ import { Customer, PatientEyeDetails } from "customer";
 import { Invoices } from "billing/Invoices";
 import { Dashboard } from "home/Dashboard";
 import { ProductMaster } from "inventory/ProductMaster";
-import { login_bg } from "assets";
-import PatientBill from "customer/PatientBill";
 import { User } from "setting/User";
 import NavbarComponent from "_components/Nav";
 import CustomerOrders from "customer/CustomerOrders";
-import TransactionModal from "billing/TransactionModal";
-// import { RegisterPatient } from "patient";
 
 export { App };
 

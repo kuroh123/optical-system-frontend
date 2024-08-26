@@ -13,20 +13,20 @@ function Dashboard() {
 
   const [dashboardData, setDashboardData] = useState({});
 
-  const fetchDashboard = async () => {
-    const response = await fetchWrapper.get(`${baseUrl}`);
-    setDashboardData(response);
-  };
+  // const fetchDashboard = async () => {
+  //   const response = await fetchWrapper.get(`${baseUrl}`);
+  //   setDashboardData(response);
+  // };
 
-  useEffect(() => {
-    fetchDashboard();
-  }, []);
+  // useEffect(() => {
+  //   fetchDashboard();
+  // }, []);
 
-  console.log(dashboardData);
 
   return (
     <Container fluid className="my-3">
-      <Row>
+      <h2>Dashboard work in progress...</h2>
+      {/* <Row>
         <Col md="12">
           <Alert>
             <strong>Location: </strong>
@@ -39,12 +39,6 @@ function Dashboard() {
             <h2 className="">{dashboardData?.patients}</h2>
           </div>
         </Col>
-        {/* <Col md="3" className="card bg-primary text-white mx-3">
-          <div className="card-body">
-            <h5>Total Eye Details</h5>
-            <h2 className="">{dashboardData?.patientRequests}</h2>
-          </div>
-        </Col> */}
         <Col md="3" className="card bg-primary text-white">
           <div className="card-body">
             <h5>Total Bills</h5>
@@ -69,7 +63,7 @@ function Dashboard() {
             <h2 className="">{dashboardData?.total_balance}</h2>
           </div>
         </Col>
-      </Row>
+      </Row> */}
     </Container>
   );
 }

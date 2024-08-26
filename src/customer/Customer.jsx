@@ -14,18 +14,11 @@ import {
   Spinner,
   Tooltip,
 } from "react-bootstrap";
-import DataTable, { createTheme } from "react-data-table-component";
-import { useSelector, useDispatch } from "react-redux";
-import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
-import ModuleDatePicker from "_components/ModuleDatePicker";
+import DataTable from "react-data-table-component";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { fetchWrapper } from "_helpers";
-import { BiMoneyWithdraw, BiReceipt } from "react-icons/bi";
 import { BsFillClipboard2PlusFill, BsFillEyeFill } from "react-icons/bs";
 import { gender } from "_helpers/eye-details";
-
-// import { parseISO, format } from "date-fns";
-
-import { patientsActions } from "_store";
 import FormModal from "_components/FormModal";
 import { customStyles } from "_helpers/tableCustomStyle";
 
@@ -41,8 +34,6 @@ function Customer() {
   const [modalShow, setModalShow] = useState(false);
   const [delShow, setDelShow] = useState(false);
   const [show, setShow] = useState(false);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   const [pending, setPending] = useState(false)
   const navigate = useNavigate();
   const [filter, setFilter] = useState({
@@ -64,7 +55,6 @@ function Customer() {
   useEffect(() => {
     fetchPatient();
   }, []);
-  console.log(fetchedPatients);
 
   const handleDelClose = () => setDelShow(false);
 
@@ -160,43 +150,6 @@ function Customer() {
         </div>
       ),
     },
-    // {
-    //   name: "View",
-    //   selector: null,
-    //   width: "145px",
-    //   cell: (row, index) => (
-    //     <div className="d-flex">
-    //       <OverlayTrigger
-    //         placement="top"
-    //         overlay={<Tooltip id="tooltip">View Eye Details</Tooltip>}
-    //       >
-    //         <div
-    //           className="table-button ms-3"
-    //           onClick={(e) => {
-    //             setCurrentCustomerId(row._id);
-    //             setShow(true);
-    //           }}
-    //         >
-    //           <BsFillEyeFill size={16} />
-    //         </div>
-    //       </OverlayTrigger>
-    //       <OverlayTrigger
-    //         placement="top"
-    //         overlay={<Tooltip id="tooltip">View Bill</Tooltip>}
-    //       >
-    //         <div
-    //           className="table-button ms-3"
-    //           onClick={(e) => {
-    //             setCurrentCustomerId(row._id);
-    //             setShow(true);
-    //           }}
-    //         >
-    //           <BiReceipt size={16} />
-    //         </div>
-    //       </OverlayTrigger>
-    //     </div>
-    //   ),
-    // },
     {
       name: "Actions",
       selector: null,
@@ -341,7 +294,6 @@ function Customer() {
                     name="first_name"
                     type="text"
                     defaultValue={values?.first_name}
-                    onChange={(e) => setFirstName(e.target.value.toUpperCase())}
                     placeholder="Enter first name"
                   />
                 </Form.Group>
@@ -355,7 +307,6 @@ function Customer() {
                     type="text"
                     size="sm"
                     defaultValue={values?.last_name}
-                    onChange={(e) => setLastName(e.target.value.toUpperCase())}
                     placeholder="Enter last name"
                   />
                 </Form.Group>
@@ -411,8 +362,9 @@ function Customer() {
                     <option selected disabled>
                       Select Gender
                     </option>
-                    {gender.map((elem) => (
+                    {gender.map((elem, index) => (
                       <option
+                        key={index}
                         selected={elem.value === values?.gender}
                         value={elem.value}
                       >
