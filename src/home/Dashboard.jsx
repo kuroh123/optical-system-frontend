@@ -25,7 +25,7 @@ function Dashboard() {
 
   return (
     <Container fluid className="my-3">
-      <h2>Dashboard work in progress...</h2>
+      <h2>Dashboard</h2>
       {/* <Row>
         <Col md="12">
           <Alert>
