@@ -206,13 +206,13 @@ const PrintInvoiceA5 = React.forwardRef((props, ref) => {
           </main>
           <footer
             className="d-flex flex-column"
-            style={{ marginTop: "auto", marginBottom: "5px", fontWeight: 600 }}
+            style={{ marginTop: "", marginBottom: "5px", fontWeight: 600 }}
           >
             <div
-              className="d-flex justify-content-end mx-5"
+              className="d-flex mx-5"
               style={{ fontSize: 14 }}
             >
-              <div className="border-top border-dark">signature</div>
+              <div>signature</div>
             </div>
             <div className="d-flex flex-column justify-content-center align-items-center border-top border-secondary">
               <div>
