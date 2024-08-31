@@ -10,9 +10,19 @@ const PrintInvoiceA5 = React.forwardRef((props, ref) => {
   };
   return (
     <>
-      {/* <style type="text/css" media="print">
-        {" @page { size: landscape; } "}
-      </style> */}
+      <style type="text/css" media="print">
+        {`
+          @page {
+            size: 21cm 14cm;
+          }
+          @media print {
+            body {
+              -webkit-print-color-adjust: exact;
+              print-color-adjust: exact;
+            }
+          }
+        `}
+      </style>
       <div>
         <div
           className="px-2"
@@ -208,9 +218,7 @@ const PrintInvoiceA5 = React.forwardRef((props, ref) => {
             className="d-flex flex-column"
             style={{ marginTop: "", marginBottom: "5px", fontWeight: 600 }}
           >
-            <div
-              className="d-flex mx-5"
-            >
+            <div className="d-flex mx-5">
               <div>signature</div>
             </div>
             <div className="d-flex flex-column justify-content-center align-items-center border-top border-secondary">
