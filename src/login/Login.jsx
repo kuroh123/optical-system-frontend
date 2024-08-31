@@ -8,6 +8,7 @@ import { login_bg, login_icon, login_icon_btn } from "assets";
 
 import { history } from "_helpers";
 import { authActions } from "_store";
+import { Button, Card } from "react-bootstrap";
 export { Login };
 
 function Login() {
@@ -40,40 +41,22 @@ function Login() {
   return (
     <div
       className="d-flex justify-content-center align-items-center"
-      style={{ ...styles.loginBg, height: "100vh", overflow: "hidden" }}
+      style={{ minHeight: "100vh" }}
     >
-      <div style={styles.loginCard}>
-        <div className="d-flex justify-content-center align-items-center mt-2">
-          <img className="mr-3" src={login_icon} />
-          <div
-            style={{
-              fontStyle: "normal",
-              fontWeight: "600",
-              fontSize: "40px",
-              lineHeight: "48px",
-            }}
-          >
-            User Login
-          </div>
-        </div>
-        <div
-          style={{
-            width: "650px",
-            height: "0px",
-            left: "418px",
-            top: "406px",
-            marginTop: "5px",
-            border: "1px solid #F2F4B3",
-            // transform: "rotate(-0.09deg)",
-          }}
-        />
-        <div>
+      <Card>
+        <Card.Header
+          className="text-center py-2 text-white"
+          style={{ fontSize: "20px", fontWeight: "600", backgroundColor: '#04364A' }}
+        >
+          User Login
+        </Card.Header>
+        <Card.Body className="px-5 py-3">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-group d-flex justify-content-center my-4">
               <button
                 disabled
                 style={styles.buttonIcon}
-                class="fa fa-user-o"
+                className="fa fa-user-o"
               ></button>
               <input
                 style={styles.loginInput}
@@ -91,7 +74,7 @@ function Login() {
               <button
                 disabled
                 style={styles.buttonIcon}
-                class="fa fa-key"
+                className="fa fa-key"
               ></button>
               <input
                 style={styles.loginInput}
@@ -110,16 +93,17 @@ function Login() {
                 style={{ position: "absolute", margin: "31px 0px 0px 50px" }}
               >
               </span> */}
-              <button
-                style={styles.loginButton}
+              <Button
                 disabled={isSubmitting}
-                className="mt-5"
+                className="mt-4 text-white"
+                style={{ backgroundColor: "#04364A", border: "none", fontWeight: "500" }}
+                type="submit"
               >
                 {isSubmitting && (
                   <span className="spinner-border spinner-border-sm mr-1"></span>
                 )}
                 Login
-              </button>
+              </Button>
             </div>
             {authError && (
               <div className="alert alert-danger mt-3 mb-0">
@@ -127,8 +111,8 @@ function Login() {
               </div>
             )}
           </form>
-        </div>
-      </div>
+        </Card.Body>
+      </Card>
     </div>
   );
 }

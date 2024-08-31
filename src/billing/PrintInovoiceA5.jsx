@@ -20,7 +20,7 @@ const PrintInvoiceA5 = React.forwardRef((props, ref) => {
             minHeight: "100vh",
             display: "flex",
             flexDirection: "column",
-            fontSize: "11px",
+            fontSize: "14px",
           }}
           ref={ref}
         >
@@ -43,7 +43,7 @@ const PrintInvoiceA5 = React.forwardRef((props, ref) => {
               </div>
             </div>
             <div className="d-flex justify-content-center align-items-end mt-2">
-              <div style={{ fontSize: "14px", fontWeight: 600 }}>INVOICE</div>
+              <div style={{ fontSize: "16px", fontWeight: 600 }}>INVOICE</div>
             </div>
             {/* <div className="d-flex justify-content-end">
               <span style={{ fontWeight: 500 }}>VATIN: </span>
@@ -210,7 +210,6 @@ const PrintInvoiceA5 = React.forwardRef((props, ref) => {
           >
             <div
               className="d-flex mx-5"
-              style={{ fontSize: 14 }}
             >
               <div>signature</div>
             </div>
