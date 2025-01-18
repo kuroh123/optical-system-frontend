@@ -51,12 +51,15 @@ const NavbarComponent = () => {
               Customer Orders
             </NavDropdown.Item>
           </NavDropdown>
-          {/* <NavDropdown
+          <NavDropdown
             active={param1 === "invoices"}
             title="Billing"
             id="basic-nav-dropdown"
           >
             <NavDropdown.Item href="/invoices">Invoices</NavDropdown.Item>
+            {/* <NavDropdown.Item href="/transactions">
+              Transactions
+            </NavDropdown.Item> */}
           </NavDropdown>
           <NavDropdown
             active={param1 === "products"}
@@ -71,8 +74,7 @@ const NavbarComponent = () => {
             id="basic-nav-dropdown"
           >
             <NavDropdown.Item href="/users">Users</NavDropdown.Item>
-          </NavDropdown> 
-          */}
+          </NavDropdown>
         </Nav>
         <Nav>
           <Nav.Item>
