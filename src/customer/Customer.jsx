@@ -28,13 +28,16 @@ function Customer() {
   const { customerId } = useParams();
   const form = useRef();
   const baseUrl = `${process.env.REACT_APP_API_URL}/patients`;
+  const [totalRows, setTotalRows] = useState(0);
+  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
   const [fetchedPatients, setFetchedPatients] = useState([]);
   const [currentCustomerId, setCurrentCustomerId] = useState("");
   const [values, setValues] = useState(null);
   const [modalShow, setModalShow] = useState(false);
   const [delShow, setDelShow] = useState(false);
   const [show, setShow] = useState(false);
-  const [pending, setPending] = useState(false)
+  const [pending, setPending] = useState(false);
   const navigate = useNavigate();
   const [filter, setFilter] = useState({
     first_name: "",
@@ -42,19 +45,26 @@ function Customer() {
     list: [],
   });
 
-  const fetchPatient = async () => {
-    setPending(true)
-    const response = await fetchWrapper.get(`${baseUrl}`);
-    if (response) {
-      setPending(false)
-      setFetchedPatients(response); 
-      setFilter({ list: response });
+  const fetchPatient = async (page, perPage) => {
+    setPending(true);
+    const { patients, totalRows } = await fetchWrapper.get(
+      `${baseUrl}?page=${page}&perPage=${perPage}`
+    );
+    if (patients) {
+      return { patients, totalRows };
     }
   };
 
   useEffect(() => {
-    fetchPatient();
-  }, []);
+    const loadpatients = async () => {
+      const { patients, totalRows } = await fetchPatient(page, perPage);
+      setPending(false);
+      setFetchedPatients(patients);
+      setTotalRows(totalRows);
+      setFilter({ list: patients });
+    };
+    loadpatients();
+  }, [page, perPage]);
 
   const handleDelClose = () => setDelShow(false);
 
@@ -92,7 +102,8 @@ function Customer() {
   const columns = [
     {
       name: "Customer Name",
-      selector: (row) => `${row?.first_name} ${row?.last_name ? row?.last_name : "" }`,
+      selector: (row) =>
+        `${row?.first_name} ${row?.last_name ? row?.last_name : ""}`,
       sortable: true,
       wrap: true,
     },
@@ -112,7 +123,7 @@ function Customer() {
     {
       name: "Registered On",
       selector: (row) => moment(row?.created_at).format("DD-MM-YYYY h:mm a"),
-      sortable: true
+      sortable: true,
     },
     {
       name: "Eye Details",
@@ -203,7 +214,7 @@ function Customer() {
     }
     if (response) {
       setModalShow(false);
-      fetchPatient();
+      fetchPatient(page, perPage);
       cleanupFn();
     }
   };
@@ -390,6 +401,10 @@ function Customer() {
         dense
         responsive
         pagination
+        paginationServer
+        paginationTotalRows={totalRows}
+        onChangePage={(newPage) => setPage(newPage)}
+        onChangeRowsPerPage={(newPerPage) => setPerPage(newPerPage)}
         paginationRowsPerPageOptions={[10, 25, 50, 100]}
         persistTableHead
         progressPending={pending}

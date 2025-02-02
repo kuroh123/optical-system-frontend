@@ -16,7 +16,13 @@ import { useSelector } from "react-redux";
 import AsyncSelect from "react-select/async";
 import { toast } from "react-toastify";
 
-const BillingFormv2 = ({ modalShow, setModalShow, fetchBilling }) => {
+const BillingFormv2 = ({
+  modalShow,
+  setModalShow,
+  fetchBilling,
+  page,
+  perPage,
+}) => {
   const productBaseUrl = `${process.env.REACT_APP_API_URL}/product`;
   const patientBaseUrl = `${process.env.REACT_APP_API_URL}/patients`;
   const billingBaseUrl = `${process.env.REACT_APP_API_URL}/billing/direct/`;
@@ -90,16 +96,18 @@ const BillingFormv2 = ({ modalShow, setModalShow, fetchBilling }) => {
 
   const fetchPatients = async (inputValue) => {
     const response = await fetchWrapper.get(patientBaseUrl);
-    return response;
+    return response.patients;
   };
 
   const loadOptions = async (inputValue) => {
     return fetchProducts(inputValue).then((res) => {
-      return res
-        // .filter((i) => !(i.current_quantity <= 0))
-        .filter((i) =>
-          i.product_code?.toLowerCase().includes(inputValue.toLowerCase())
-        );
+      return (
+        res
+          // .filter((i) => !(i.current_quantity <= 0))
+          .filter((i) =>
+            i.product_code?.toLowerCase().includes(inputValue.toLowerCase())
+          )
+      );
     });
   };
 
@@ -243,7 +251,7 @@ const BillingFormv2 = ({ modalShow, setModalShow, fetchBilling }) => {
       "Billing has been created!"
     );
     if (billResponse) {
-      fetchBilling();
+      fetchBilling(page, perPage);
       cleanupFn();
     }
   };
@@ -322,9 +330,7 @@ const BillingFormv2 = ({ modalShow, setModalShow, fetchBilling }) => {
                     placeholder="Select Patient"
                     onChange={handlePatientSelect}
                     loadOptions={loadPatientOptions}
-                    getOptionLabel={(e) =>
-                      e.first_name 
-                    }
+                    getOptionLabel={(e) => e.first_name}
                     getOptionValue={(e) => e._id}
                     isClearable
                   />

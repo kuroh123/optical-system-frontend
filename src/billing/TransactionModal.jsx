@@ -15,7 +15,14 @@ import {
 import DataTable from "react-data-table-component";
 import { AiOutlineClose } from "react-icons/ai";
 
-const TransactionModal = ({ show, setShow, id, fetchBilling }) => {
+const TransactionModal = ({
+  show,
+  setShow,
+  id,
+  fetchBilling,
+  page,
+  perPage,
+}) => {
   const baseUrl = `${process.env.REACT_APP_API_URL}/billing/transactions`;
   const [transactions, setTransactions] = useState([]);
   const form = useRef();
@@ -78,7 +85,7 @@ const TransactionModal = ({ show, setShow, id, fetchBilling }) => {
     if (response) {
       setShow(false);
       fetchTransactions();
-      fetchBilling();
+      fetchBilling(page, perPage);
     }
   };
 
