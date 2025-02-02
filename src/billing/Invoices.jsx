@@ -35,12 +35,15 @@ const Invoices = () => {
   const { billingId } = useParams();
   const baseUrl = `${process.env.REACT_APP_API_URL}/billing`;
   const [billing, setBilling] = useState([]);
+  const [totalRows, setTotalRows] = useState(0);
+  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
   const [printData, setPrintData] = useState(null);
   const [modalShow, setModalShow] = useState(false);
   const [transactionModal, setTransactionModal] = useState(false);
   const [printModal, setPrintModal] = useState(false);
   const [currentInvoiceId, setCurrentInvoiceId] = useState("");
-  const [pending, setPending] = useState(false)
+  const [pending, setPending] = useState(false);
   const user = useSelector((x) => x.auth.user.user);
 
   const printBillRef = useRef(null);
@@ -54,21 +57,30 @@ const Invoices = () => {
     list: [],
   });
 
-  const fetchBilling = async () => {
-    setPending(true)
-    const response = await fetchWrapper.get(
-      `${baseUrl}/${user.location ? `?location=${user.location?._id}` : ""}`
+  const fetchBilling = async (page, perPage) => {
+    setPending(true);
+    const { billings, totalRows } = await fetchWrapper.get(
+      `${baseUrl}/${
+        user.location
+          ? `?location=${user.location?._id}&page=${page}&perPage=${perPage}`
+          : `?page=${page}&perPage=${perPage}`
+      }`
     );
-    if (response) {
-      setPending(false)
-      setBilling(response);
-      setFilter({ list: response });
+    if (billings) {
+      return { billings, totalRows };
     }
   };
 
   useEffect(() => {
-    fetchBilling();
-  }, []);
+    const loadBillings = async () => {
+      const { billings, totalRows } = await fetchBilling(page, perPage);
+      setPending(false);
+      setBilling(billings);
+      setTotalRows(totalRows);
+      setFilter({ list: billings });
+    };
+    loadBillings();
+  }, [page, perPage]);
   console.log(billing);
 
   const conditionalRowStyles = [
@@ -202,7 +214,10 @@ const Invoices = () => {
     },
     {
       name: "Patient Name",
-      selector: (row) => `${row.patient?.first_name} ${row.patient?.last_name ? row.patient?.last_name : ""}`,
+      selector: (row) =>
+        `${row.patient?.first_name} ${
+          row.patient?.last_name ? row.patient?.last_name : ""
+        }`,
       sortable: true,
       width: "160px",
     },
@@ -365,6 +380,10 @@ const Invoices = () => {
         persistTableHead
         responsive
         pagination
+        paginationServer
+        paginationTotalRows={totalRows}
+        onChangePage={(newPage) => setPage(newPage)}
+        onChangeRowsPerPage={(newPerPage) => setPerPage(newPerPage)}
         paginationRowsPerPageOptions={[10, 25, 50, 100]}
         progressPending={pending}
         progressComponent={
@@ -378,12 +397,16 @@ const Invoices = () => {
         modalShow={modalShow}
         setModalShow={setModalShow}
         fetchBilling={fetchBilling}
+        page={page}
+        perPage={perPage}
       />
       <TransactionModal
         show={transactionModal}
         setShow={setTransactionModal}
         id={currentInvoiceId}
         fetchBilling={fetchBilling}
+        page={page}
+        perPage={perPage}
       />
       <Modal
         show={printModal}
