@@ -51,19 +51,15 @@ function Customer() {
       `${baseUrl}?page=${page}&perPage=${perPage}`
     );
     if (patients) {
-      return { patients, totalRows };
-    }
-  };
-
-  useEffect(() => {
-    const loadpatients = async () => {
-      const { patients, totalRows } = await fetchPatient(page, perPage);
       setPending(false);
       setFetchedPatients(patients);
       setTotalRows(totalRows);
       setFilter({ list: patients });
-    };
-    loadpatients();
+    }
+  };
+
+  useEffect(() => {
+    fetchPatient(page, perPage);
   }, [page, perPage]);
 
   const handleDelClose = () => setDelShow(false);
@@ -295,7 +291,7 @@ function Customer() {
         <Form ref={form} onSubmit={(e) => handleSubmit(e)}>
           <Container fluid>
             <Row className="mb-3 mt-4">
-              <Col md={{ span: 6, offset: 3 }} className="mb-2">
+              <Col md={4} className="mb-2">
                 <Form.Group>
                   <Form.Label>First name</Form.Label>
                   <Form.Control
@@ -309,7 +305,7 @@ function Customer() {
                   />
                 </Form.Group>
               </Col>
-              <Col md={{ span: 6, offset: 3 }} className="mb-2">
+              <Col md={4} className="mb-2">
                 <Form.Group>
                   <Form.Label>Last Name</Form.Label>
                   <Form.Control
@@ -322,7 +318,7 @@ function Customer() {
                   />
                 </Form.Group>
               </Col>
-              <Col md={{ span: 6, offset: 3 }} className="mb-2">
+              <Col md={4} className="mb-2">
                 <Form.Group>
                   <Form.Label>Mobile</Form.Label>
                   <Form.Control
@@ -336,33 +332,7 @@ function Customer() {
                   />
                 </Form.Group>
               </Col>
-              <Col md={{ span: 6, offset: 3 }} className="mb-2">
-                <Form.Group>
-                  <Form.Label>Examined By</Form.Label>
-                  <Form.Control
-                    autoComplete="off"
-                    name="examined_by"
-                    size="sm"
-                    type="text"
-                    defaultValue={values?.examined_by}
-                    placeholder="Examined By"
-                  />
-                </Form.Group>
-              </Col>
-              <Col md={{ span: 6, offset: 3 }} className="mb-2">
-                <Form.Group>
-                  <Form.Label>Address</Form.Label>
-                  <Form.Control
-                    autoComplete="off"
-                    name="address"
-                    size="sm"
-                    type="textarea"
-                    defaultValue={values?.address}
-                    placeholder="Enter Address"
-                  />
-                </Form.Group>
-              </Col>
-              <Col md={{ span: 6, offset: 3 }}>
+              <Col md={4}>
                 <Form.Group>
                   <Form.Label>Gender</Form.Label>
                   <select
@@ -383,6 +353,46 @@ function Customer() {
                       </option>
                     ))}
                   </select>
+                </Form.Group>
+              </Col>
+              <Col md={4} className="mb-2">
+                <Form.Group>
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control
+                    autoComplete="off"
+                    name="email"
+                    size="sm"
+                    type="email"
+                    defaultValue={values?.email}
+                    placeholder="Enter email"
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={4} className="mb-2">
+                <Form.Group>
+                  <Form.Label>Examined By</Form.Label>
+                  <Form.Control
+                    autoComplete="off"
+                    name="examined_by"
+                    size="sm"
+                    type="text"
+                    defaultValue={values?.examined_by}
+                    placeholder="Examined By"
+                  />
+                </Form.Group>
+              </Col>
+
+              <Col md={12} className="mb-2">
+                <Form.Group>
+                  <Form.Label>Address</Form.Label>
+                  <Form.Control
+                    autoComplete="off"
+                    name="address"
+                    size="sm"
+                    as="textarea"
+                    defaultValue={values?.address}
+                    placeholder="Enter Address"
+                  />
                 </Form.Group>
               </Col>
             </Row>

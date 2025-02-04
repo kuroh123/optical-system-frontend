@@ -67,19 +67,15 @@ const Invoices = () => {
       }`
     );
     if (billings) {
-      return { billings, totalRows };
-    }
-  };
-
-  useEffect(() => {
-    const loadBillings = async () => {
-      const { billings, totalRows } = await fetchBilling(page, perPage);
       setPending(false);
       setBilling(billings);
       setTotalRows(totalRows);
       setFilter({ list: billings });
-    };
-    loadBillings();
+    }
+  };
+
+  useEffect(() => {
+    fetchBilling(page, perPage);
   }, [page, perPage]);
   console.log(billing);
 
