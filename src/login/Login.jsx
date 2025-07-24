@@ -40,105 +40,206 @@ function Login() {
 
   return (
     <div
-      className="d-flex justify-content-center align-items-center"
-      style={{ minHeight: "100vh" }}
+      className="min-vh-100 w-100 d-flex align-items-center justify-content-center"
+      style={{
+        // background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+        padding: "20px",
+      }}
     >
-      <Card>
+      <Card
+        className="border-0 shadow-lg"
+        style={{
+          borderRadius: "20px",
+          maxWidth: "600px",
+          width: "100%",
+          overflow: "hidden",
+        }}
+      >
+        {/* Header with Logo/Brand */}
         <Card.Header
-          className="text-center py-2 text-white"
+          className="text-center py-4 border-0"
           style={{
-            fontSize: "20px",
-            fontWeight: "600",
-            backgroundColor: "#04364A",
+            background: "linear-gradient(135deg, #04364A 0%, #176B87 100%)",
+            color: "white",
           }}
         >
-          User Login
+          <div className="mb-2">
+            <div
+              className="mx-auto mb-3 d-flex align-items-center justify-content-center"
+              style={{
+                width: "60px",
+                height: "60px",
+                backgroundColor: "rgba(255,255,255,0.2)",
+                borderRadius: "50%",
+                fontSize: "24px",
+              }}
+            >
+              👓
+            </div>
+            <h3 className="mb-1 fw-bold">Sultan Opticals</h3>
+            <p className="mb-0 opacity-75">Optical Management System</p>
+          </div>
         </Card.Header>
-        <Card.Body className="px-5 py-3">
+
+        <Card.Body className="p-5">
           {/* Demo Credentials */}
           <div
-            className="alert alert-info text-center py-2 mb-3"
+            className="alert border-0 text-center py-3 mb-4"
             style={{
-              backgroundColor: "#E3F2FD",
-              border: "1px solid #64B5F6",
-              borderRadius: "8px",
+              backgroundColor: "#F0F9FF",
+              border: "2px dashed #0EA5E9",
+              borderRadius: "12px",
             }}
           >
-            <small className="text-muted">
-              <strong>Demo Login:</strong>
-              <br />
-              <span className="text-primary">Username:</span> sultan@gmail.com
-              <br />
-              <span className="text-primary">Password:</span> sultan@123
-            </small>
+            <div className="d-flex align-items-center justify-content-center mb-2">
+              <span className="me-2">🔑</span>
+              <strong className="text-primary">Demo Credentials</strong>
+            </div>
+            <div className="small text-muted">
+              <div className="mb-1">
+                <strong>Username:</strong> <code>sultan@gmail.com</code>
+              </div>
+              <div>
+                <strong>Password:</strong> <code>sultan@123</code>
+              </div>
+            </div>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-group d-flex justify-content-center my-4">
-              <button
-                disabled
-                style={styles.buttonIcon}
-                className="fa fa-user-o"
-              ></button>
+            {/* Username Field */}
+            <div className="form-group mb-4">
+              <label className="form-label text-muted fw-medium mb-2">
+                <i className="fa fa-user-o me-2"></i>Username
+              </label>
               <input
-                style={styles.loginInput}
-                placeholder="username"
+                placeholder="Enter your username"
                 name="username"
                 type="text"
                 {...register("username")}
                 className={`form-control ${
                   errors.username ? "is-invalid" : ""
                 }`}
+                style={{
+                  borderRadius: "10px",
+                  border: "2px solid #E5E7EB",
+                  padding: "12px 16px",
+                  fontSize: "14px",
+                  transition: "all 0.3s ease",
+                }}
+                onFocus={(e) => (e.target.style.borderColor = "#04364A")}
+                onBlur={(e) => (e.target.style.borderColor = "#E5E7EB")}
               />
-              <div className="invalid-feedback">{errors.username?.message}</div>
+              {errors.username && (
+                <div className="invalid-feedback">
+                  {errors.username?.message}
+                </div>
+              )}
             </div>
-            <div className="form-group d-flex justify-content-center">
-              <button
-                disabled
-                style={styles.buttonIcon}
-                className="fa fa-key"
-              ></button>
+
+            {/* Password Field */}
+            <div className="form-group mb-4">
+              <label className="form-label text-muted fw-medium mb-2">
+                <i className="fa fa-key me-2"></i>Password
+              </label>
               <input
-                style={styles.loginInput}
-                placeholder="password"
+                placeholder="Enter your password"
                 name="password"
                 type="password"
                 {...register("password")}
                 className={`form-control ${
                   errors.password ? "is-invalid" : ""
                 }`}
-              />
-              <div className="invalid-feedback">{errors.password?.message}</div>
-            </div>
-            <div className="d-flex justify-content-center">
-              {/* <span
-                style={{ position: "absolute", margin: "31px 0px 0px 50px" }}
-              >
-              </span> */}
-              <Button
-                disabled={isSubmitting}
-                className="mt-4 text-white"
                 style={{
-                  backgroundColor: "#04364A",
-                  border: "none",
-                  fontWeight: "500",
+                  borderRadius: "10px",
+                  border: "2px solid #E5E7EB",
+                  padding: "12px 16px",
+                  fontSize: "14px",
+                  transition: "all 0.3s ease",
                 }}
-                type="submit"
-              >
-                {isSubmitting && (
-                  <span className="spinner-border spinner-border-sm mr-1"></span>
-                )}
-                Login
-              </Button>
+                onFocus={(e) => (e.target.style.borderColor = "#04364A")}
+                onBlur={(e) => (e.target.style.borderColor = "#E5E7EB")}
+              />
+              {errors.password && (
+                <div className="invalid-feedback">
+                  {errors.password?.message}
+                </div>
+              )}
             </div>
+
+            {/* Login Button */}
+            <Button
+              disabled={isSubmitting}
+              className="w-100 py-3 border-0 fw-bold text-white"
+              style={{
+                background: "linear-gradient(135deg, #04364A 0%, #176B87 100%)",
+                borderRadius: "10px",
+                fontSize: "16px",
+                transition: "all 0.3s ease",
+              }}
+              type="submit"
+              onMouseEnter={(e) =>
+                (e.target.style.transform = "translateY(-1px)")
+              }
+              onMouseLeave={(e) => (e.target.style.transform = "translateY(0)")}
+            >
+              {isSubmitting ? (
+                <>
+                  <span className="spinner-border spinner-border-sm me-2"></span>
+                  Signing In...
+                </>
+              ) : (
+                <>
+                  <i className="fa fa-sign-in me-2"></i>
+                  Sign In
+                </>
+              )}
+            </Button>
+
+            {/* Error Message */}
             {authError && (
-              <div className="alert alert-danger mt-3 mb-0">
+              <div
+                className="alert alert-danger mt-4 mb-0 border-0"
+                style={{ borderRadius: "10px" }}
+              >
+                <i className="fa fa-exclamation-triangle me-2"></i>
                 {authError.message}
               </div>
             )}
           </form>
+
+          {/* Footer */}
+          <div className="text-center mt-4 pt-3 border-top">
+            <small className="text-muted">
+              © 2025 Sultan Opticals. All rights reserved.
+            </small>
+          </div>
         </Card.Body>
       </Card>
+
+      <style jsx>{`
+        .login-container {
+          animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .form-control:focus {
+          box-shadow: 0 0 0 0.2rem rgba(4, 54, 74, 0.25) !important;
+        }
+
+        .btn:hover {
+          box-shadow: 0 4px 12px rgba(4, 54, 74, 0.3) !important;
+        }
+      `}</style>
     </div>
   );
 }
