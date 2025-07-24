@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useSelector, useDispatch } from "react-redux";
-import { login_bg, login_icon, login_icon_btn } from "assets";
+import { login_bg, login_icon, login_icon_btn, sultan_logo } from "assets";
 // import {  } from "react-icons/bs";
 
 import { history } from "_helpers";
@@ -47,7 +47,7 @@ function Login() {
       }}
     >
       <Card
-        className="border-0 shadow-lg"
+        className=""
         style={{
           borderRadius: "20px",
           maxWidth: "600px",
@@ -74,14 +74,14 @@ function Login() {
                 fontSize: "24px",
               }}
             >
-              👓
+              <img className="img-fluid" src={sultan_logo} alt="" />
             </div>
             <h3 className="mb-1 fw-bold">Sultan Opticals</h3>
             <p className="mb-0 opacity-75">Optical Management System</p>
           </div>
         </Card.Header>
 
-        <Card.Body className="p-5">
+        <Card.Body className="px-5 py-3">
           {/* Demo Credentials */}
           <div
             className="alert border-0 text-center py-3 mb-4"
