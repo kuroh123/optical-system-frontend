@@ -46,11 +46,33 @@ function Login() {
       <Card>
         <Card.Header
           className="text-center py-2 text-white"
-          style={{ fontSize: "20px", fontWeight: "600", backgroundColor: '#04364A' }}
+          style={{
+            fontSize: "20px",
+            fontWeight: "600",
+            backgroundColor: "#04364A",
+          }}
         >
           User Login
         </Card.Header>
         <Card.Body className="px-5 py-3">
+          {/* Demo Credentials */}
+          <div
+            className="alert alert-info text-center py-2 mb-3"
+            style={{
+              backgroundColor: "#E3F2FD",
+              border: "1px solid #64B5F6",
+              borderRadius: "8px",
+            }}
+          >
+            <small className="text-muted">
+              <strong>Demo Login:</strong>
+              <br />
+              <span className="text-primary">Username:</span> sultan@gmail.com
+              <br />
+              <span className="text-primary">Password:</span> sultan@123
+            </small>
+          </div>
+
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-group d-flex justify-content-center my-4">
               <button
@@ -96,7 +118,11 @@ function Login() {
               <Button
                 disabled={isSubmitting}
                 className="mt-4 text-white"
-                style={{ backgroundColor: "#04364A", border: "none", fontWeight: "500" }}
+                style={{
+                  backgroundColor: "#04364A",
+                  border: "none",
+                  fontWeight: "500",
+                }}
                 type="submit"
               >
                 {isSubmitting && (
