@@ -64,6 +64,8 @@ function Dashboard() {
 
   useEffect(() => {
     fetchDashboard();
+    // Scroll to top when dashboard loads (after login)
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   return (
